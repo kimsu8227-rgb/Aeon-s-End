@@ -3,170 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>에이언즈 엔드 랜더마이저</title>
-
-<style>
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
-  background:linear-gradient(180deg,#f4f6ff,#e9ecff);
-  color:#1a1a2b;
-}
-main{
-  max-width:960px;
-  margin:auto;
-  padding:28px;
-}
-h1{margin:0 0 16px}
-select,button{
-  padding:10px 14px;
-  font-size:15px;
-  border-radius:10px;
-}
-select{
-  border:1px solid #cfd6ff;
-}
-button{
-  background:#5b6cff;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-button:hover{opacity:.9}
-
-.card{
-  background:white;
-  border-radius:16px;
-  padding:16px;
-  margin-top:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-h2{margin:0 0 10px}
-.item{margin:6px 0}
-.small{opacity:.6;font-size:13px}
-.badge{
-  display:inline-block;
-  background:#eee;
-  color:#444;
-  border-radius:6px;
-  padding:2px 6px;
-  margin-left:6px;
-  font-size:12px;
-}
-</style>
+<title>CSV 테스트</title>
 </head>
-
 <body>
-<main>
-  <h1>에이언즈 엔드 랜더마이저</h1>
+<h1>CSV 로딩 테스트</h1>
 
-  <label>게임 종류</label><br>
-  <select id="mode">
-    <option value="base">기본</option>
-    <option value="war">영원한전쟁</option>
-    <option value="both" selected>기본 + 영원한전쟁</option>
-  </select>
+<button onclick="load()">CSV 불러오기</button>
 
-  <br><br>
-  <button onclick="run()">🎲 뽑기</button>
-
-  <div id="result"></div>
-</main>
+<pre id="out"></pre>
 
 <script>
-/* ===== 고정 규칙 ===== */
-const PICK = {
-  "네메시스": 1,
-  "캐릭터": 2,
-  "보석": 2,
-  "유물": 3,
-  "주문": 4
-};
+async function load(){
+  const out = document.getElementById("out");
+  out.textContent = "불러오는 중...\n";
 
-function allowKinds(mode){
-  if(mode==="base") return ["기본","묻비"];
-  if(mode==="war")  return ["영전","묻비"];
-  return ["기본","영전","묻비"];
-}
+  try{
+    const res = await fetch("data.csv");
+    out.textContent += "HTTP 상태: " + res.status + "\n";
 
-/* ===== 정규화 유틸 ===== */
-function clean(v){
-  return v ? v.replace(/\uFEFF/g,"").trim() : "";
-}
-
-function normalizeCategory(v){
-  if(v.includes("네메")) return "네메시스";
-  if(v.includes("캐릭")) return "캐릭터";
-  if(v.includes("보석")) return "보석";
-  if(v.includes("유물")) return "유물";
-  if(v.includes("주문")) return "주문";
-  return v;
-}
-
-function normalizeKind(v){
-  if(v.includes("기본")) return "기본";
-  if(v.includes("영"))   return "영전";
-  if(v.includes("묻"))   return "묻비";
-  return v;
-}
-
-function shuffle(arr){
-  return arr.slice().sort(()=>Math.random()-0.5);
-}
-
-/* ===== 메인 ===== */
-async function run(){
-  const res = await fetch("data.csv");
-  const text = await res.text();
-
-  // 헤더 제거
-  const lines = text.trim().split(/\r?\n/).slice(1);
-
-  const rows = lines.map(line=>{
-    // ⭐ 탭 / 쉼표 모두 처리
-    const parts = line.split(/\t|,/);
-    const [c,k,n,e] = parts;
-    return {
-      category: normalizeCategory(clean(c)),
-      kind: normalizeKind(clean(k)),
-      name: clean(n),
-      ether: clean(e)
-    };
-  });
-
-  const mode = document.getElementById("mode").value;
-  const allowed = allowKinds(mode);
-  const out = document.getElementById("result");
-  out.innerHTML = "";
-
-  for(const cat in PICK){
-    const pool = rows.filter(r =>
-      r.category === cat && allowed.includes(r.kind)
-    );
-
-    if(pool.length === 0){
-      out.innerHTML += `
-        <div class="card">
-          <h2>${cat}</h2>
-          <div class="small">데이터 없음</div>
-        </div>`;
-      continue;
-    }
-
-    const picked = shuffle(pool).slice(0, PICK[cat]);
-
-    const box = document.createElement("div");
-    box.className = "card";
-    box.innerHTML = `<h2>${cat}</h2>` +
-      picked.map(p =>
-        `<div class="item">
-          ${p.name}
-          ${p.ether ? `<span class="small">(에테르 ${p.ether})</span>` : ""}
-          ${p.kind==="묻비" ? `<span class="badge">묻비</span>` : ""}
-        </div>`
-      ).join("");
-
-    out.appendChild(box);
+    const text = await res.text();
+    out.textContent += "\n--- CSV 내용 ---\n";
+    out.textContent += text.slice(0, 1000); // 앞부분만 출력
+  }catch(e){
+    out.textContent += "에러 발생:\n" + e.message;
   }
 }
 </script>
