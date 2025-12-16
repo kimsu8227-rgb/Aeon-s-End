@@ -34,4 +34,174 @@
     border:1px solid var(--line);
     border-radius:16px;
     padding:16px;
-    box-shadow:0 10px 25px rgba(0,0,0,.06
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+  }
+  .card h2{margin:0 0 10px; font-size:16px}
+  .item{padding:8px 10px; border:1px solid #eef0ff; border-radius:12px; margin:8px 0}
+  .meta{margin-top:6px; color:var(--muted); font-size:12px}
+  .badge{
+    display:inline-block; margin-left:8px; padding:2px 7px; border-radius:999px;
+    background:#eef0ff; color:#3c47a8; font-size:12px; font-weight:700;
+    border:1px solid #d9ddff;
+  }
+  .error{
+    background:#fff2f2; border:1px solid #ffd1d1; color:#8a1f1f;
+    padding:12px 14px; border-radius:14px; margin-top:14px;
+  }
+</style>
+</head>
+
+<body>
+<main>
+  <h1>에이언즈 엔드 랜더마이저</h1>
+
+  <div class="row">
+    <label>게임 종류</label>
+    <select id="mode">
+      <option value="base">기본</option>
+      <option value="war">영원한전쟁</option>
+      <option value="both" selected>기본 + 영원한전쟁</option>
+    </select>
+
+    <button id="roll">🎲 뽑기</button>
+  </div>
+
+  <div class="hint">
+    규칙: 네메시스 1 / 캐릭터 2 / 보석 2 / 유물 3 / 주문 4 ·
+    <b>묻비</b>는 어떤 모드에서도 항상 포함 · 중복 없이 뽑기 · 에테르 값은 표시용
+  </div>
+
+  <div id="msg"></div>
+  <div id="result" class="grid"></div>
+</main>
+
+<script>
+  /* ===== 규칙 ===== */
+  const PICK = { "네메시스":1, "캐릭터":2, "보석":2, "유물":3, "주문":4 };
+
+  function allowedKinds(mode){
+    if(mode==="base") return new Set(["기본","묻비"]);
+    if(mode==="war")  return new Set(["영전","묻비"]);
+    return new Set(["기본","영전","묻비"]);
+  }
+
+  /* ===== 정규화 ===== */
+  const clean = (v)=> (v ?? "").replace(/\uFEFF/g,"").trim();
+
+  function normCategory(v){
+    v = clean(v);
+    if(v.includes("네메")) return "네메시스";
+    if(v.includes("캐릭")) return "캐릭터";
+    if(v.includes("보석")) return "보석";
+    if(v.includes("유물")) return "유물";
+    if(v.includes("주문")) return "주문";
+    return v;
+  }
+
+  function normKind(v){
+    v = clean(v);
+    // '영원한전쟁' 같이 들어와도 영전으로 통일
+    if(v.includes("기본")) return "기본";
+    if(v.includes("영"))   return "영전";
+    if(v.includes("묻"))   return "묻비";
+    return v;
+  }
+
+  function parseCSV(text){
+    const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+
+    // 헤더가 있으면 제거(첫 줄에 '카테고리' 같은 단어가 있으면 헤더로 판단)
+    const startIdx = (lines[0] && lines[0].includes("카테고리")) ? 1 : 0;
+
+    const rows = [];
+    for(let i=startIdx;i<lines.length;i++){
+      const line = lines[i];
+      // 쉼표 CSV 기준 (지금 너 파일이 이 형태)
+      const parts = line.split(",");
+      const c = normCategory(parts[0]);
+      const k = normKind(parts[1]);
+      const n = clean(parts[2]);
+      const e = clean(parts[3]);
+
+      if(!c || !k || !n) continue;
+      rows.push({ category:c, kind:k, name:n, ether:e });
+    }
+    return rows;
+  }
+
+  function sampleUnique(arr, n){
+    if(n > arr.length) throw new Error(`후보가 ${arr.length}개라서 ${n}개를 중복 없이 뽑을 수 없어.`);
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a.slice(0,n);
+  }
+
+  async function loadData(){
+    const res = await fetch("data.csv", { cache: "no-store" });
+    if(!res.ok) throw new Error(`data.csv를 못 불러왔어 (HTTP ${res.status})`);
+    const text = await res.text();
+    return parseCSV(text);
+  }
+
+  function render(resultByCat){
+    const box = document.getElementById("result");
+    box.innerHTML = "";
+
+    for(const cat of Object.keys(PICK)){
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `<h2>${cat}</h2>`;
+
+      for(const item of resultByCat[cat]){
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+          <div><b>${item.name}</b>
+            ${item.kind==="묻비" ? `<span class="badge">묻비</span>` : ``}
+          </div>
+          ${item.ether ? `<div class="meta">에테르 ${item.ether} · 종류 ${item.kind}</div>` : `<div class="meta">종류 ${item.kind}</div>`}
+        `;
+        card.appendChild(div);
+      }
+      box.appendChild(card);
+    }
+  }
+
+  async function roll(){
+    const msg = document.getElementById("msg");
+    msg.innerHTML = "";
+    try{
+      const rows = await loadData();
+      const mode = document.getElementById("mode").value;
+      const allowed = allowedKinds(mode);
+
+      const byCat = {};
+      for(const r of rows){
+        if(!(r.category in PICK)) continue;
+        if(!allowed.has(r.kind)) continue;
+        (byCat[r.category] ||= []).push(r);
+      }
+
+      const result = {};
+      for(const [cat, cnt] of Object.entries(PICK)){
+        const pool = byCat[cat] || [];
+        result[cat] = sampleUnique(pool, cnt);
+      }
+
+      render(result);
+    }catch(e){
+      msg.innerHTML = `<div class="error">${e.message}</div>`;
+      document.getElementById("result").innerHTML = "";
+    }
+  }
+
+  document.getElementById("roll").addEventListener("click", roll);
+
+  // 첫 로딩 때 한 번 자동으로 뽑기
+  roll();
+</script>
+</body>
+</html>
