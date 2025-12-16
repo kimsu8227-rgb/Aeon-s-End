@@ -13,7 +13,7 @@ body{
   color:#1a1a2b;
 }
 main{
-  max-width:900px;
+  max-width:960px;
   margin:auto;
   padding:28px;
 }
@@ -22,6 +22,8 @@ select,button{
   padding:10px 14px;
   font-size:15px;
   border-radius:10px;
+}
+select{
   border:1px solid #cfd6ff;
 }
 button{
@@ -42,6 +44,15 @@ button:hover{opacity:.9}
 h2{margin:0 0 10px}
 .item{margin:6px 0}
 .small{opacity:.6;font-size:13px}
+.badge{
+  display:inline-block;
+  background:#eee;
+  color:#444;
+  border-radius:6px;
+  padding:2px 6px;
+  margin-left:6px;
+  font-size:12px;
+}
 </style>
 </head>
 
@@ -63,65 +74,98 @@ h2{margin:0 0 10px}
 </main>
 
 <script>
+/* ===== 고정 규칙 ===== */
 const PICK = {
-  "네메시스":1,
-  "캐릭터":2,
-  "보석":2,
-  "유물":3,
-  "주문":4
+  "네메시스": 1,
+  "캐릭터": 2,
+  "보석": 2,
+  "유물": 3,
+  "주문": 4
 };
 
-function allow(mode){
+function allowKinds(mode){
   if(mode==="base") return ["기본","묻비"];
-  if(mode==="war") return ["영전","묻비"];
+  if(mode==="war")  return ["영전","묻비"];
   return ["기본","영전","묻비"];
 }
 
+/* ===== 정규화 유틸 ===== */
 function clean(v){
-  return v.replace(/\uFEFF/g,"").trim(); // BOM 제거 + 공백 제거
+  return v ? v.replace(/\uFEFF/g,"").trim() : "";
+}
+
+function normalizeCategory(v){
+  if(v.includes("네메")) return "네메시스";
+  if(v.includes("캐릭")) return "캐릭터";
+  if(v.includes("보석")) return "보석";
+  if(v.includes("유물")) return "유물";
+  if(v.includes("주문")) return "주문";
+  return v;
+}
+
+function normalizeKind(v){
+  if(v.includes("기본")) return "기본";
+  if(v.includes("영"))   return "영전";
+  if(v.includes("묻"))   return "묻비";
+  return v;
 }
 
 function shuffle(arr){
   return arr.slice().sort(()=>Math.random()-0.5);
 }
 
+/* ===== 메인 ===== */
 async function run(){
   const res = await fetch("data.csv");
   const text = await res.text();
 
+  // 헤더 제거
   const lines = text.trim().split(/\r?\n/).slice(1);
 
-  const rows = lines.map(l=>{
-    const [c,k,n,e] = l.split(",");
+  const rows = lines.map(line=>{
+    // ⭐ 탭 / 쉼표 모두 처리
+    const parts = line.split(/\t|,/);
+    const [c,k,n,e] = parts;
     return {
-      c: clean(c),
-      k: clean(k),
-      n: clean(n),
-      e: e ? clean(e) : ""
+      category: normalizeCategory(clean(c)),
+      kind: normalizeKind(clean(k)),
+      name: clean(n),
+      ether: clean(e)
     };
   });
 
   const mode = document.getElementById("mode").value;
-  const ok = allow(mode);
+  const allowed = allowKinds(mode);
   const out = document.getElementById("result");
   out.innerHTML = "";
 
   for(const cat in PICK){
-    const pool = rows.filter(r => r.c === cat && ok.includes(r.k));
+    const pool = rows.filter(r =>
+      r.category === cat && allowed.includes(r.kind)
+    );
+
     if(pool.length === 0){
-      out.innerHTML += `<div class="card"><b>${cat}</b><br><span class="small">데이터 없음</span></div>`;
+      out.innerHTML += `
+        <div class="card">
+          <h2>${cat}</h2>
+          <div class="small">데이터 없음</div>
+        </div>`;
       continue;
     }
 
-    const pick = shuffle(pool).slice(0, PICK[cat]);
+    const picked = shuffle(pool).slice(0, PICK[cat]);
 
     const box = document.createElement("div");
     box.className = "card";
-    box.innerHTML =
-      `<h2>${cat}</h2>` +
-      pick.map(p =>
-        `<div class="item">${p.n} ${p.e ? `<span class="small">(에테르 ${p.e})</span>`:""}</div>`
+    box.innerHTML = `<h2>${cat}</h2>` +
+      picked.map(p =>
+        `<div class="item">
+          ${p.name}
+          ${p.ether ? `<span class="small">(에테르 ${p.ether})</span>` : ""}
+          ${p.kind==="묻비" ? `<span class="badge">묻비</span>` : ""}
+        </div>`
       ).join("");
+
     out.appendChild(box);
   }
 }
