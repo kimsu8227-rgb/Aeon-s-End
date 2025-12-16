@@ -1,33 +1,37 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CSV 테스트</title>
-</head>
-<body>
-<h1>CSV 로딩 테스트</h1>
-
-<button onclick="load()">CSV 불러오기</button>
-
-<pre id="out"></pre>
-
-<script>
-async function load(){
-  const out = document.getElementById("out");
-  out.textContent = "불러오는 중...\n";
-
-  try{
-    const res = await fetch("data.csv");
-    out.textContent += "HTTP 상태: " + res.status + "\n";
-
-    const text = await res.text();
-    out.textContent += "\n--- CSV 내용 ---\n";
-    out.textContent += text.slice(0, 1000); // 앞부분만 출력
-  }catch(e){
-    out.textContent += "에러 발생:\n" + e.message;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>에이언즈 엔드 랜더마이저</title>
+<style>
+  :root{
+    --bg1:#f6f7ff; --bg2:#eef1ff;
+    --card:#ffffff; --text:#141427; --muted:#6b6f93;
+    --line:#d7dcff; --accent:#5b6cff;
   }
-}
-</script>
-</body>
-</html>
+  body{
+    margin:0; font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:var(--text);
+  }
+  main{max-width:980px; margin:0 auto; padding:28px;}
+  h1{margin:0 0 14px; letter-spacing:-.2px}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  select,button{
+    padding:10px 14px; font-size:15px; border-radius:12px;
+  }
+  select{border:1px solid var(--line); background:white}
+  button{
+    border:0; background:var(--accent); color:white; cursor:pointer; font-weight:800;
+  }
+  button:hover{opacity:.92}
+  .hint{color:var(--muted); font-size:13px; margin-top:10px; line-height:1.5}
+  .grid{display:grid; gap:14px; margin-top:18px}
+  @media (min-width:860px){ .grid{grid-template-columns:1fr 1fr} }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,.06
