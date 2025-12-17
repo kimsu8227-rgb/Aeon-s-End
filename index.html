@@ -62,6 +62,7 @@
       <option value="base">기본</option>
       <option value="war">영원한전쟁</option>
       <option value="both" selected>기본 + 영원한전쟁</option>
+      <option value="random">랜덤</option>
     </select>
 
     <button id="roll">🎲 뽑기</button>
@@ -179,10 +180,18 @@
 
   async function roll(){
     const msg = document.getElementById("msg");
+    const modeLabel = mode === "base" ? "기본" : mode === "war" ? "영원한전쟁" : "기본+영원한전쟁";
+msg.innerHTML = `<div class="hint">이번 판 모드: <b>${modeLabel}</b></div>`;
     msg.innerHTML = "";
     try{
       const rows = await loadData();
       const mode = document.getElementById("mode").value;
+      let mode = document.getElementById("mode").value;
+
+if (mode === "random") {
+  const choices = ["base", "war", "both"];
+  mode = choices[Math.floor(Math.random() * choices.length)];
+}
       const allowed = allowedKinds(mode);
 
       const byCat = {};
