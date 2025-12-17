@@ -63,314 +63,214 @@ button:hover{opacity:.92}
 }
 .item b{letter-spacing:.2px}
 
-.settingRow{
-  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+/* ===== 모달 ===== */
+.modal{
+  position:fixed; inset:0;
+  background:rgba(20,22,60,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
 }
-.settingRow label{
-  width:110px;
-  color:#2a2a42;
-  font-weight:700;
+.modal.open{display:flex}
+.modalBox{
+  width:min(420px,90vw);
+  background:#fff;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
-.settingRow input{
-  width:140px;
+.modalBox h2{margin:0 0 8px}
+.modalRow{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin:12px 0;
 }
-hr{
-  border:0;border-top:1px solid #eef0ff;margin:16px 0;
-}
-.smallLink{
-  color:var(--muted); font-size:12px; margin-top:10px;
+.modalRow label{font-weight:700}
+.modalActions{
+  display:flex; gap:10px; justify-content:flex-end; margin-top:18px;
 }
 </style>
 </head>
 
 <body>
 <main>
-  <h1>에이언즈 엔드 랜더마이저</h1>
+<h1>에이언즈 엔드 랜더마이저</h1>
 
-  <div class="row">
-    <label>게임 종류</label>
-    <select id="mode">
-      <option value="base">기본</option>
-      <option value="war">영원한전쟁</option>
-      <option value="both" selected>기본 + 영원한전쟁</option>
-      <option value="random">랜덤</option>
-    </select>
+<div class="row">
+  <label>게임 종류</label>
+  <select id="mode">
+    <option value="base">기본</option>
+    <option value="war">영원한전쟁</option>
+    <option value="both" selected>기본 + 영원한전쟁</option>
+    <option value="random">랜덤</option>
+  </select>
 
-    <button id="roll">🎲 뽑기</button>
-    <button id="openSettings" class="secondary">⚙ 설정</button>
-  </div>
+  <button id="roll">🎲 뽑기</button>
+  <button id="openSettings" class="secondary">⚙ 설정</button>
+</div>
 
-  <!-- 메인 화면 -->
-  <section id="screen-main">
-    <div class="hint">
-      규칙: 네메시스 1 / 캐릭터 2 / (설정) 보석 / (설정) 유물 / (설정) 주문 ·
-      <b>묻비</b>는 어떤 모드에서도 항상 포함 · 중복 없이 뽑기 · 에테르는 표시용
-    </div>
+<div class="hint">
+  기본값: 보석 2 / 유물 3 / 주문 4 ·
+  <b>묻비</b>는 어떤 모드에서도 항상 포함 · 중복 없이 뽑기
+</div>
 
-    <div id="msg" class="hint"></div>
-    <div id="result" class="grid"></div>
-  </section>
-
-  <!-- 설정 화면 -->
-  <section id="screen-settings" style="display:none">
-    <div class="card">
-      <h2>설정</h2>
-      <div class="hint" style="margin-top:6px">
-        보석 / 유물 / 주문 개수를 바꿀 수 있어. 저장하면 바로 반영되고, 새로고침해도 유지돼.
-      </div>
-
-      <hr>
-
-      <div class="settingRow">
-        <label for="set-gem">보석 개수</label>
-        <input id="set-gem" type="number" min="0" step="1" />
-      </div>
-
-      <div class="settingRow">
-        <label for="set-relic">유물 개수</label>
-        <input id="set-relic" type="number" min="0" step="1" />
-      </div>
-
-      <div class="settingRow">
-        <label for="set-spell">주문 개수</label>
-        <input id="set-spell" type="number" min="0" step="1" />
-      </div>
-
-      <div class="smallLink">
-        기본값: 보석 2 / 유물 3 / 주문 4
-      </div>
-
-      <hr>
-
-      <div class="row">
-        <button id="saveSettings">저장</button>
-        <button id="resetSettings" class="secondary">초기화</button>
-        <button id="closeSettings" class="secondary">닫기</button>
-      </div>
-    </div>
-  </section>
+<div id="msg" class="hint"></div>
+<div id="result" class="grid"></div>
 </main>
 
-<script>
-/* ===== 고정 규칙 ===== */
-const FIXED_PICK = { "네메시스":1, "캐릭터":2 };
+<!-- ===== 설정 모달 ===== -->
+<div id="settingsModal" class="modal">
+  <div class="modalBox">
+    <h2>카드 개수 설정</h2>
+    <div class="hint">저장하면 즉시 반영돼.</div>
 
-/* ===== 모드 허용 ===== */
+    <div class="modalRow">
+      <label>보석</label>
+      <input type="number" id="set-gem" min="0">
+    </div>
+    <div class="modalRow">
+      <label>유물</label>
+      <input type="number" id="set-relic" min="0">
+    </div>
+    <div class="modalRow">
+      <label>주문</label>
+      <input type="number" id="set-spell" min="0">
+    </div>
+
+    <div class="modalActions">
+      <button id="resetSettings" class="secondary">초기화</button>
+      <button id="saveSettings">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== 기본값 ===== */
+const DEFAULTS = { gem:2, relic:3, spell:4 };
+
+/* ===== 규칙 ===== */
 function allowedKinds(mode){
   if(mode==="base") return new Set(["기본","묻비"]);
   if(mode==="war")  return new Set(["영전","묻비"]);
   return new Set(["기본","영전","묻비"]);
 }
 
-/* ===== 설정 저장/로드 (localStorage) ===== */
-const DEFAULTS = { gem:2, relic:3, spell:4 };
-
-function getNum(key, fallback){
-  const v = localStorage.getItem(key);
-  const n = Number(v);
-  return Number.isFinite(n) ? n : fallback;
+function getNum(key, d){
+  const v = Number(localStorage.getItem(key));
+  return Number.isFinite(v) ? v : d;
 }
 
 function getPickConfig(){
   return {
-    "네메시스": 1,
-    "캐릭터": 2,
-    "보석": getNum("pick_gem", DEFAULTS.gem),
-    "유물": getNum("pick_relic", DEFAULTS.relic),
-    "주문": getNum("pick_spell", DEFAULTS.spell)
+    네메시스:1,
+    캐릭터:2,
+    보석:getNum("pick_gem",DEFAULTS.gem),
+    유물:getNum("pick_relic",DEFAULTS.relic),
+    주문:getNum("pick_spell",DEFAULTS.spell)
   };
 }
 
-/* ===== 정규화 ===== */
-const clean = (v)=> (v ?? "").replace(/\uFEFF/g,"").trim();
-
-function normCategory(v){
-  v = clean(v);
-  if(v.includes("네메")) return "네메시스";
-  if(v.includes("캐릭")) return "캐릭터";
-  if(v.includes("보석")) return "보석";
-  if(v.includes("유물")) return "유물";
-  if(v.includes("주문")) return "주문";
-  return v;
-}
-function normKind(v){
-  v = clean(v);
-  if(v.includes("기본")) return "기본";
-  if(v.includes("영"))   return "영전"; // 영원한전쟁/영전 모두 처리
-  if(v.includes("묻"))   return "묻비";
-  return v;
-}
-
 /* ===== CSV ===== */
-function parseCSV(text){
-  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-
-  // 헤더가 있는 경우 자동 제거
-  const startIdx = (lines[0] && lines[0].includes("카테고리")) ? 1 : 0;
-
-  const rows = [];
-  for(let i=startIdx;i<lines.length;i++){
-    const p = lines[i].split(",");
-    const category = normCategory(p[0]);
-    const kind = normKind(p[1]);
-    const name = clean(p[2]);
-    const ether = clean(p[3]);
-
-    if(!category || !kind || !name) continue;
-    rows.push({ category, kind, name, ether });
-  }
-  return rows;
-}
+const clean = v => (v??"").replace(/\uFEFF/g,"").trim();
+const normCategory = v =>
+  v.includes("네메")?"네메시스":
+  v.includes("캐릭")?"캐릭터":
+  v.includes("보석")?"보석":
+  v.includes("유물")?"유물":
+  v.includes("주문")?"주문":v;
+const normKind = v =>
+  v.includes("기본")?"기본":
+  v.includes("영")?"영전":
+  v.includes("묻")?"묻비":v;
 
 async function loadData(){
-  const res = await fetch("data.csv", { cache:"no-store" });
-  if(!res.ok) throw new Error(`data.csv를 못 불러왔어 (HTTP ${res.status})`);
-  return parseCSV(await res.text());
+  const r = await fetch("data.csv",{cache:"no-store"});
+  const t = await r.text();
+  return t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+    const p=l.split(",");
+    return {
+      category:normCategory(clean(p[0])),
+      kind:normKind(clean(p[1])),
+      name:clean(p[2]),
+      ether:clean(p[3])
+    };
+  });
 }
 
-/* ===== 랜덤 ===== */
-function shuffled(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
-
-function sampleUnique(pool, n){
-  if(n <= 0) return [];
-  if(n > pool.length) throw new Error(`후보가 ${pool.length}개라서 ${n}개를 중복 없이 뽑을 수 없어.`);
-  return shuffled(pool).slice(0,n);
-}
+const shuffle=a=>a.slice().sort(()=>Math.random()-0.5);
 
 /* ===== 렌더 ===== */
-function render(result, pickConfig){
-  const box = document.getElementById("result");
-  box.innerHTML = "";
-
-  const order = ["네메시스","캐릭터","보석","유물","주문"];
-  for(const cat of order){
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `<h2>${cat} <span class="meta">(선택 ${pickConfig[cat]}개)</span></h2>`;
-
-    for(const item of result[cat]){
-      // 에테르 숫자 안전 추출 → "6♪ 카드이름"
-      const etherNum = Number(String(item.ether ?? "").replace(/[^\d]/g,""));
-      const title = (Number.isFinite(etherNum) && etherNum>0)
-        ? `${etherNum}♪ ${item.name}`
-        : item.name;
-
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div><b>${title}</b>${item.kind==="묻비" ? `<span class="badge">묻비</span>` : ""}</div>
-        <div class="meta">${item.kind}</div>
-      `;
-      card.appendChild(div);
+function render(result){
+  const box=document.getElementById("result");
+  box.innerHTML="";
+  for(const cat in result){
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<h2>${cat}</h2>`;
+    for(const it of result[cat]){
+      const n=Number(it.ether.replace(/[^\d]/g,""));
+      const title=n?`${n}♪ ${it.name}`:it.name;
+      const d=document.createElement("div");
+      d.className="item";
+      d.innerHTML=`<b>${title}</b><div class="meta">${it.kind}</div>`;
+      card.appendChild(d);
     }
-
     box.appendChild(card);
   }
 }
 
-/* ===== 화면 전환 ===== */
-const screenMain = document.getElementById("screen-main");
-const screenSettings = document.getElementById("screen-settings");
-
-function openSettings(){
-  screenMain.style.display = "none";
-  screenSettings.style.display = "block";
-
-  document.getElementById("set-gem").value = getNum("pick_gem", DEFAULTS.gem);
-  document.getElementById("set-relic").value = getNum("pick_relic", DEFAULTS.relic);
-  document.getElementById("set-spell").value = getNum("pick_spell", DEFAULTS.spell);
-}
-
-function closeSettings(){
-  screenSettings.style.display = "none";
-  screenMain.style.display = "block";
-}
-
-/* ===== 메인 뽑기 ===== */
+/* ===== 메인 ===== */
 async function roll(){
-  const msg = document.getElementById("msg");
-  msg.innerHTML = "";
+  let mode=document.getElementById("mode").value;
+  if(mode==="random"){
+    mode=["base","war","both"][Math.floor(Math.random()*3)];
+  }
+  document.getElementById("msg").innerHTML=
+    `이번 판 모드: <b>${mode==="base"?"기본":mode==="war"?"영원한전쟁":"기본 + 영원한전쟁"}</b>`;
 
-  // 기본값: both (HTML에서 selected로 이미 설정됨)
+  const rows=await loadData();
+  const allowed=allowedKinds(mode);
+  const pick=getPickConfig();
+  const byCat={};
 
-  // A모드: 랜덤 선택이면 뽑기 누를 때마다 모드 랜덤 확정
-  let mode = document.getElementById("mode").value;
-  if(mode === "random"){
-    const choices = ["base","war","both"];
-    mode = choices[Math.floor(Math.random() * choices.length)];
+  for(const r of rows){
+    if(!(r.category in pick)) continue;
+    if(!allowed.has(r.kind)) continue;
+    (byCat[r.category] ||= []).push(r);
   }
 
-  const modeLabel =
-    mode==="base" ? "기본" :
-    mode==="war" ? "영원한전쟁" :
-    "기본 + 영원한전쟁";
-
-  msg.innerHTML = `이번 판 모드: <b>${modeLabel}</b>`;
-
-  try{
-    const rows = await loadData();
-    const allowed = allowedKinds(mode);
-    const pickConfig = getPickConfig();
-
-    // 카테고리별 풀 구성
-    const byCat = {};
-    for(const r of rows){
-      if(!(r.category in pickConfig)) continue;
-      if(!allowed.has(r.kind)) continue;
-      (byCat[r.category] ||= []).push(r);
-    }
-
-    // 결과 뽑기
-    const result = {};
-    for(const [cat, cnt] of Object.entries(pickConfig)){
-      const pool = byCat[cat] || [];
-      result[cat] = sampleUnique(pool, cnt);
-    }
-
-    render(result, pickConfig);
-  }catch(e){
-    msg.innerHTML = `<div class="error">${e.message}</div>`;
-    document.getElementById("result").innerHTML = "";
+  const result={};
+  for(const c in pick){
+    result[c]=shuffle(byCat[c]||[]).slice(0,pick[c]);
   }
+  render(result);
 }
 
-/* ===== 이벤트 ===== */
-document.getElementById("roll").addEventListener("click", roll);
-document.getElementById("openSettings").addEventListener("click", openSettings);
-document.getElementById("closeSettings").addEventListener("click", closeSettings);
+/* ===== 모달 ===== */
+const modal=document.getElementById("settingsModal");
+document.getElementById("openSettings").onclick=()=>{
+  modal.classList.add("open");
+  setGem.value=getNum("pick_gem",2);
+  setRelic.value=getNum("pick_relic",3);
+  setSpell.value=getNum("pick_spell",4);
+};
+modal.onclick=e=>{ if(e.target===modal) modal.classList.remove("open"); };
 
-document.getElementById("saveSettings").addEventListener("click", () => {
-  const gem = Math.max(0, Number(document.getElementById("set-gem").value || 0));
-  const relic = Math.max(0, Number(document.getElementById("set-relic").value || 0));
-  const spell = Math.max(0, Number(document.getElementById("set-spell").value || 0));
+saveSettings.onclick=()=>{
+  localStorage.setItem("pick_gem",setGem.value);
+  localStorage.setItem("pick_relic",setRelic.value);
+  localStorage.setItem("pick_spell",setSpell.value);
+  modal.classList.remove("open");
+  roll();
+};
+resetSettings.onclick=()=>{
+  localStorage.clear();
+  modal.classList.remove("open");
+  roll();
+};
 
-  localStorage.setItem("pick_gem", String(gem));
-  localStorage.setItem("pick_relic", String(relic));
-  localStorage.setItem("pick_spell", String(spell));
-
-  closeSettings();
-  roll(); // 저장 후 즉시 반영
-});
-
-document.getElementById("resetSettings").addEventListener("click", () => {
-  localStorage.removeItem("pick_gem");
-  localStorage.removeItem("pick_relic");
-  localStorage.removeItem("pick_spell");
-
-  // 입력값도 기본으로
-  document.getElementById("set-gem").value = DEFAULTS.gem;
-  document.getElementById("set-relic").value = DEFAULTS.relic;
-  document.getElementById("set-spell").value = DEFAULTS.spell;
-});
-
-/* 첫 로딩: 자동 뽑기 */
+rollBtn=document.getElementById("roll");
+rollBtn.onclick=roll;
 roll();
 </script>
 </body>
