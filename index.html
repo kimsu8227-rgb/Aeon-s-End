@@ -9,11 +9,15 @@
 :root{
   --bg:#0e1024;
   --panel:#16193a;
-  --line:rgba(140,155,255,.25);
-  --line-strong:rgba(140,155,255,.45);
-  --text:#eef1ff;
-  --muted:#aeb4ff;
-  --accent:#7a85ff;
+
+  --line-dark:rgba(140,155,255,.25);
+  --line-light:rgba(120,130,200,.45);
+
+  --text-dark:#1a1d33;
+  --text-light:#eef1ff;
+  --muted:#6b70a5;
+
+  --accent:#5c66ff;
 }
 
 /* ===== 기본 ===== */
@@ -23,7 +27,7 @@ body{
   background:
     radial-gradient(1200px 500px at 50% -10%, #2b2f5a 0%, transparent 60%),
     linear-gradient(180deg, #0e1024 0%, #15183a 100%);
-  color:var(--text);
+  color:var(--text-light);
 }
 
 main{
@@ -55,9 +59,9 @@ select,button,input{
 }
 
 select,input{
-  border:1px solid var(--line);
+  border:1px solid var(--line-dark);
   background:#0f1230;
-  color:var(--text);
+  color:var(--text-light);
 }
 
 button{
@@ -73,7 +77,7 @@ button{
 
 button.secondary{
   background:#0f1230;
-  border:1px solid var(--line);
+  border:1px solid var(--line-dark);
   box-shadow:none;
 }
 
@@ -83,7 +87,7 @@ button:hover{opacity:.92}
   text-align:center;
   margin-top:10px;
   font-size:12px;
-  color:var(--muted);
+  color:#aeb4ff;
 }
 
 #msg{
@@ -93,31 +97,26 @@ button:hover{opacity:.92}
 }
 
 /* =========================================================
-   ===== 표(Table) UI – 가독성 & 카드 구분 강화 =====
+   ===== 표(Table) UI – 밝은 내용 박스 / 어두운 글씨 =====
    ========================================================= */
 
 .table{
   margin-top:18px;
   display:flex;
   flex-direction:column;
-  gap:12px;                 /* 행 간격 */
+  gap:12px;
 }
 
-/* 행 하나 = 카드 하나 */
+/* 행 하나 */
 .rowItem{
   display:grid;
   grid-template-columns:120px 1fr;
   gap:14px;
   padding:14px;
-  border:1px solid var(--line);
+  border:1px solid var(--line-dark);
   border-radius:16px;
-  background:rgba(255,255,255,.045);
+  background:rgba(255,255,255,.04);
   box-shadow:0 12px 26px rgba(0,0,0,.28);
-}
-
-.rowItem:hover{
-  border-color:var(--line-strong);
-  background:rgba(255,255,255,.065);
 }
 
 /* 왼쪽 카테고리 라벨 */
@@ -129,7 +128,7 @@ button:hover{opacity:.92}
   font-weight:900;
   letter-spacing:.8px;
   font-size:14px;
-  color:#f2f4ff;
+  color:var(--text-light);
 
   background:linear-gradient(
     180deg,
@@ -141,7 +140,7 @@ button:hover{opacity:.92}
   padding:12px 6px;
 }
 
-/* 카테고리별 컬러 차별화 */
+/* 카테고리별 컬러 */
 .rowItem[data-cat="네메시스"] .rowTitle{
   background:linear-gradient(180deg, rgba(255,120,120,.22), rgba(255,120,120,.07));
 }
@@ -158,48 +157,56 @@ button:hover{opacity:.92}
   background:linear-gradient(180deg, rgba(180,120,255,.24), rgba(180,120,255,.07));
 }
 
-/* 오른쪽 내용 영역 */
+/* ===== 오른쪽 내용 영역 (밝은 패널) ===== */
 .rowContent{
   display:flex;
-  flex-wrap:wrap;          /* 한 줄로 뭉치지 않게 */
+  flex-wrap:wrap;
   gap:8px 10px;
   align-items:flex-start;
-  line-height:1.4;
+
+  background:#f5f7ff;
+  border-radius:12px;
+  padding:10px 12px;
 }
 
-/* ===== 카드 아이템을 pill(칩) 형태로 ===== */
+/* ===== 카드 항목 pill ===== */
 .pill{
   display:inline-flex;
   align-items:center;
   gap:6px;
   padding:7px 11px;
   border-radius:999px;
-  border:1px solid rgba(140,155,255,.22);
-  background:rgba(15,18,48,.65);
-  color:#eef1ff;
+  border:1px solid var(--line-light);
+  background:#ffffff;
+  color:var(--text-dark);
   font-size:13px;
   white-space:nowrap;
+
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.75);
 }
 
-/* 에테르 강조 */
+/* 에테르 */
 .pill .ether{
   font-weight:900;
-  color:#cfd4ff;
+  color:#2c36b5;
   letter-spacing:.2px;
 }
 
-/* 묻비 강조 */
+/* 묻비 */
 .pill.mutbi{
-  border-color:rgba(170,190,255,.45);
+  background:#eef1ff;
+  border-color:#6f7cff;
   box-shadow:
-    0 0 0 1px rgba(170,190,255,.12) inset,
-    0 0 8px rgba(170,190,255,.18);
+    0 0 0 1px rgba(110,125,255,.25) inset,
+    0 2px 6px rgba(90,100,255,.25);
 }
 
 .pill .tag{
   font-size:11px;
-  color:#b8beff;
-  opacity:.95;
+  color:#4a55c9;
+  font-weight:700;
 }
 
 /* ===== 설정 모달 ===== */
@@ -218,7 +225,7 @@ button:hover{opacity:.92}
 .modalBox{
   width:360px;
   background:#12153a;
-  border:1px solid var(--line);
+  border:1px solid var(--line-dark);
   border-radius:16px;
   padding:18px;
   box-shadow:0 25px 60px rgba(0,0,0,.45);
