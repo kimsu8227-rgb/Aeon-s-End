@@ -14,8 +14,10 @@
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  color:var(--text);
+  background:
+    radial-gradient(1200px 500px at 50% -10%, #2b2f5a 0%, transparent 60%),
+    linear-gradient(180deg, #0e1024 0%, #15183a 100%);
+  color:#e9ecff;
 }
 main{max-width:980px;margin:0 auto;padding:28px}
 h1{margin:0 0 14px}
@@ -27,8 +29,10 @@ select,button,input{
 }
 select,input{border:1px solid var(--line); background:#fff}
 button{
-  border:0;background:var(--accent);
-  color:#fff;font-weight:800;cursor:pointer
+  background:linear-gradient(180deg,#8f9bff,#5c66ff);
+  box-shadow:
+    0 6px 18px rgba(90,100,255,.35),
+    inset 0 1px 0 rgba(255,255,255,.25);
 }
 button.secondary{
   background:#fff;color:#1a1a2b;border:1px solid var(--line);
@@ -39,16 +43,57 @@ button:hover{opacity:.92}
 .grid{display:grid;gap:14px;margin-top:18px}
 @media(min-width:860px){.grid{grid-template-columns:1fr 1fr}}
 .card{
-  background:#fff;border:1px solid var(--line);
-  border-radius:16px;padding:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,.06)
+  background:linear-gradient(180deg,#1b1f45,#16193a);
+  border:1px solid rgba(140,155,255,.25);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.45),
+    inset 0 0 0 1px rgba(255,255,255,.03);
 }
-.card h2{margin:0 0 10px;font-size:16px}
+.card h2{
+  color:#e9ecff;
+  font-weight:800;
+  letter-spacing:.6px;
+}
+
 .item{
-  padding:10px 12px;border:1px solid #eef0ff;
-  border-radius:12px;margin:10px 0
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(140,155,255,.15);
+  backdrop-filter: blur(2px);
 }
-.meta{margin-top:6px;color:var(--muted);font-size:12px}
+
+.item b{
+  color:#f5f7ff;
+}
+
+.meta{
+  color:#aeb4ff;
+}
+  .hero{
+  text-align:center;
+  padding:42px 20px 36px;
+  margin-bottom:24px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:40px;
+  letter-spacing:4px;
+  font-weight:900;
+  color:#f3f5ff;
+  text-shadow:
+    0 0 20px rgba(120,140,255,.35),
+    0 0 40px rgba(90,110,255,.15);
+}
+
+.hero p{
+  margin-top:10px;
+  color:#aeb4ff;
+  font-size:14px;
+  letter-spacing:.4px;
+}
+
 .badge{
   display:inline-block;margin-left:6px;
   padding:2px 7px;border-radius:999px;
@@ -61,7 +106,6 @@ button:hover{opacity:.92}
   color:#8a1f1f;padding:12px 14px;
   border-radius:14px;margin-top:14px
 }
-.item b{letter-spacing:.2px}
 
 /* ===== 설정 모달 ===== */
 .modal{
@@ -94,7 +138,10 @@ button:hover{opacity:.92}
 
 <body>
 <main>
-  <h1>에이언즈 엔드 랜더마이저</h1>
+ <header class="hero">
+  <h1>AEON’S END</h1>
+  <p>무작위로 구성되는 균열 너머의 전투</p>
+</header>
 
   <div class="row">
     <label>게임 종류</label>
