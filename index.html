@@ -10,11 +10,13 @@
   --bg:#0e1024;
   --panel:#16193a;
   --line:rgba(140,155,255,.25);
+  --line-strong:rgba(140,155,255,.45);
   --text:#eef1ff;
   --muted:#aeb4ff;
   --accent:#7a85ff;
 }
 
+/* ===== 기본 ===== */
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
@@ -24,7 +26,11 @@ body{
   color:var(--text);
 }
 
-main{max-width:900px;margin:0 auto;padding:26px}
+main{
+  max-width:900px;
+  margin:0 auto;
+  padding:26px;
+}
 
 h1{
   text-align:center;
@@ -33,29 +39,44 @@ h1{
   font-size:34px;
 }
 
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+/* ===== 상단 컨트롤 ===== */
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+}
 
 select,button,input{
   padding:8px 12px;
   font-size:14px;
   border-radius:10px;
 }
+
 select,input{
   border:1px solid var(--line);
   background:#0f1230;
   color:var(--text);
 }
+
 button{
   border:0;
   background:linear-gradient(180deg,#8f9bff,#5c66ff);
   color:white;
   font-weight:800;
   cursor:pointer;
+  box-shadow:
+    0 6px 18px rgba(90,100,255,.35),
+    inset 0 1px 0 rgba(255,255,255,.25);
 }
+
 button.secondary{
   background:#0f1230;
   border:1px solid var(--line);
+  box-shadow:none;
 }
+
 button:hover{opacity:.92}
 
 .hint{
@@ -71,60 +92,140 @@ button:hover{opacity:.92}
   font-size:13px;
 }
 
-/* ===== 표 UI ===== */
+/* =========================================================
+   ===== 표(Table) UI – 가독성 & 카드 구분 강화 =====
+   ========================================================= */
+
 .table{
   margin-top:18px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  overflow:hidden;
-  background:rgba(255,255,255,.03);
+  display:flex;
+  flex-direction:column;
+  gap:12px;                 /* 행 간격 */
 }
 
+/* 행 하나 = 카드 하나 */
 .rowItem{
   display:grid;
-  grid-template-columns:110px 1fr;
-  gap:12px;
-  padding:10px 14px;
-  border-bottom:1px solid rgba(140,155,255,.15);
+  grid-template-columns:120px 1fr;
+  gap:14px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  box-shadow:0 12px 26px rgba(0,0,0,.28);
 }
 
-.rowItem:last-child{border-bottom:0}
+.rowItem:hover{
+  border-color:var(--line-strong);
+  background:rgba(255,255,255,.065);
+}
 
+/* 왼쪽 카테고리 라벨 */
 .rowTitle{
-  font-weight:800;
-  color:#cfd4ff;
-  letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-weight:900;
+  letter-spacing:.8px;
   font-size:14px;
+  color:#f2f4ff;
+
+  background:linear-gradient(
+    180deg,
+    rgba(143,155,255,.22),
+    rgba(92,102,255,.08)
+  );
+  border:1px solid rgba(140,155,255,.32);
+  border-radius:12px;
+  padding:12px 6px;
 }
 
+/* 카테고리별 컬러 차별화 */
+.rowItem[data-cat="네메시스"] .rowTitle{
+  background:linear-gradient(180deg, rgba(255,120,120,.22), rgba(255,120,120,.07));
+}
+.rowItem[data-cat="캐릭터"] .rowTitle{
+  background:linear-gradient(180deg, rgba(120,255,200,.20), rgba(120,255,200,.06));
+}
+.rowItem[data-cat="보석"] .rowTitle{
+  background:linear-gradient(180deg, rgba(120,170,255,.24), rgba(120,170,255,.07));
+}
+.rowItem[data-cat="유물"] .rowTitle{
+  background:linear-gradient(180deg, rgba(255,210,120,.24), rgba(255,210,120,.07));
+}
+.rowItem[data-cat="주문"] .rowTitle{
+  background:linear-gradient(180deg, rgba(180,120,255,.24), rgba(180,120,255,.07));
+}
+
+/* 오른쪽 내용 영역 */
 .rowContent{
-  font-size:14px;
-  line-height:1.6;
+  display:flex;
+  flex-wrap:wrap;          /* 한 줄로 뭉치지 않게 */
+  gap:8px 10px;
+  align-items:flex-start;
+  line-height:1.4;
 }
 
-.dot{margin:0 6px;color:#8f96ff}
+/* ===== 카드 아이템을 pill(칩) 형태로 ===== */
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(140,155,255,.22);
+  background:rgba(15,18,48,.65);
+  color:#eef1ff;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+/* 에테르 강조 */
+.pill .ether{
+  font-weight:900;
+  color:#cfd4ff;
+  letter-spacing:.2px;
+}
+
+/* 묻비 강조 */
+.pill.mutbi{
+  border-color:rgba(170,190,255,.45);
+  box-shadow:
+    0 0 0 1px rgba(170,190,255,.12) inset,
+    0 0 8px rgba(170,190,255,.18);
+}
+
+.pill .tag{
+  font-size:11px;
+  color:#b8beff;
+  opacity:.95;
+}
 
 /* ===== 설정 모달 ===== */
 .modal{
-  position:fixed; inset:0;
+  position:fixed;
+  inset:0;
   background:rgba(0,0,0,.55);
   display:none;
   align-items:center;
   justify-content:center;
   z-index:1000;
 }
+
 .modal.open{display:flex}
 
 .modalBox{
   width:360px;
   background:#12153a;
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:16px;
   padding:18px;
+  box-shadow:0 25px 60px rgba(0,0,0,.45);
 }
 
 .modalBox h2{
-  margin:0 0 6px;
+  margin:0 0 8px;
   text-align:center;
 }
 
@@ -132,16 +233,17 @@ button:hover{opacity:.92}
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin:12px 0;
+  margin:14px 0;
 }
 
 .modalActions{
   display:flex;
   justify-content:flex-end;
   gap:8px;
-  margin-top:14px;
+  margin-top:16px;
 }
 </style>
+
 </head>
 
 <body>
@@ -227,29 +329,44 @@ const shuffle=a=>a.slice().sort(()=>Math.random()-0.5);
 
 /* ===== 렌더 (표) ===== */
 function render(result){
-  const box=document.getElementById("result");
-  box.innerHTML="";
-  const order=["네메시스","캐릭터","보석","유물","주문"];
+  const box = document.getElementById("result");
+  box.innerHTML = "";
+  box.className = "table";
+
+  const order = ["네메시스","캐릭터","보석","유물","주문"];
 
   for(const cat of order){
-    const row=document.createElement("div");
-    row.className="rowItem";
+    const row = document.createElement("div");
+    row.className = "rowItem";
+    row.dataset.cat = cat; // ✅ 카테고리별 색상용
 
-    const t=document.createElement("div");
-    t.className="rowTitle";
-    t.textContent=cat;
+    const t = document.createElement("div");
+    t.className = "rowTitle";
+    t.textContent = cat;
 
-    const c=document.createElement("div");
-    c.className="rowContent";
-    c.innerHTML=result[cat].map(i=>{
-      const e=etherVal(i);
-      return e<Infinity?`${e}♪ ${i.name}`:i.name;
-    }).join(`<span class="dot">·</span>`);
+    const c = document.createElement("div");
+    c.className = "rowContent";
 
-    row.append(t,c);
+    for(const it of (result[cat] || [])){
+      const etherNum = Number(String(it.ether ?? "").replace(/[^\d]/g,"")) || 0;
+      const pill = document.createElement("span");
+      pill.className = "pill" + (it.kind === "묻비" ? " mutbi" : "");
+
+      const nameText = it.name;
+
+      // ✅ 원하는 표기: 6♪ 카드이름
+      pill.innerHTML = etherNum
+        ? `<span class="ether">${etherNum}♪</span><span>${nameText}</span>${it.kind==="묻비" ? `<span class="tag">묻비</span>` : ``}`
+        : `<span>${nameText}</span>${it.kind==="묻비" ? `<span class="tag">묻비</span>` : ``}`;
+
+      c.appendChild(pill);
+    }
+
+    row.append(t, c);
     box.appendChild(row);
   }
 }
+
 
 /* ===== 메인 ===== */
 async function roll(){
