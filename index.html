@@ -7,141 +7,146 @@
 
 <style>
 :root{
-  --bg1:#f6f7ff; --bg2:#eef1ff;
-  --card:#ffffff; --text:#141427; --muted:#6b6f93;
-  --line:#d7dcff; --accent:#5b6cff;
+  --bg:#0e1024;
+  --panel:#16193a;
+  --line:rgba(140,155,255,.25);
+  --text:#eef1ff;
+  --muted:#aeb4ff;
+  --accent:#7a85ff;
 }
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
   background:
     radial-gradient(1200px 500px at 50% -10%, #2b2f5a 0%, transparent 60%),
     linear-gradient(180deg, #0e1024 0%, #15183a 100%);
-  color:#e9ecff;
+  color:var(--text);
 }
-main{max-width:980px;margin:0 auto;padding:28px}
-h1{margin:0 0 14px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+main{max-width:900px;margin:0 auto;padding:26px}
+
+h1{
+  text-align:center;
+  margin:10px 0 20px;
+  letter-spacing:4px;
+  font-size:34px;
+}
+
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+
 select,button,input{
-  padding:10px 14px;
-  font-size:15px;
-  border-radius:12px;
+  padding:8px 12px;
+  font-size:14px;
+  border-radius:10px;
 }
-select,input{border:1px solid var(--line); background:#fff}
+select,input{
+  border:1px solid var(--line);
+  background:#0f1230;
+  color:var(--text);
+}
 button{
+  border:0;
   background:linear-gradient(180deg,#8f9bff,#5c66ff);
-  box-shadow:
-    0 6px 18px rgba(90,100,255,.35),
-    inset 0 1px 0 rgba(255,255,255,.25);
+  color:white;
+  font-weight:800;
+  cursor:pointer;
 }
 button.secondary{
-  background:#fff;color:#1a1a2b;border:1px solid var(--line);
-  font-weight:700;
+  background:#0f1230;
+  border:1px solid var(--line);
 }
 button:hover{opacity:.92}
-.hint{color:var(--muted);font-size:13px;margin-top:10px;line-height:1.5}
-.grid{display:grid;gap:14px;margin-top:18px}
-@media(min-width:860px){.grid{grid-template-columns:1fr 1fr}}
-.card{
-  background:linear-gradient(180deg,#1b1f45,#16193a);
-  border:1px solid rgba(140,155,255,.25);
-  border-radius:18px;
-  padding:16px;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,.45),
-    inset 0 0 0 1px rgba(255,255,255,.03);
-}
-.card h2{
-  color:#e9ecff;
-  font-weight:800;
-  letter-spacing:.6px;
-}
 
-.item{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(140,155,255,.15);
-  backdrop-filter: blur(2px);
-}
-
-.item b{
-  color:#f5f7ff;
-}
-
-.meta{
-  color:#aeb4ff;
-}
-  .hero{
+.hint{
   text-align:center;
-  padding:42px 20px 36px;
-  margin-bottom:24px;
-}
-
-.hero h1{
-  margin:0;
-  font-size:40px;
-  letter-spacing:4px;
-  font-weight:900;
-  color:#f3f5ff;
-  text-shadow:
-    0 0 20px rgba(120,140,255,.35),
-    0 0 40px rgba(90,110,255,.15);
-}
-
-.hero p{
   margin-top:10px;
-  color:#aeb4ff;
-  font-size:14px;
-  letter-spacing:.4px;
+  font-size:12px;
+  color:var(--muted);
 }
 
-.badge{
-  display:inline-block;margin-left:6px;
-  padding:2px 7px;border-radius:999px;
-  background:#eef0ff;color:#3c47a8;
-  font-size:12px;font-weight:700;
-  border:1px solid #d9ddff
+#msg{
+  text-align:center;
+  margin-top:12px;
+  font-size:13px;
 }
-.error{
-  background:#fff2f2;border:1px solid #ffd1d1;
-  color:#8a1f1f;padding:12px 14px;
-  border-radius:14px;margin-top:14px
+
+/* ===== 표 UI ===== */
+.table{
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  background:rgba(255,255,255,.03);
 }
+
+.rowItem{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:12px;
+  padding:10px 14px;
+  border-bottom:1px solid rgba(140,155,255,.15);
+}
+
+.rowItem:last-child{border-bottom:0}
+
+.rowTitle{
+  font-weight:800;
+  color:#cfd4ff;
+  letter-spacing:.5px;
+  font-size:14px;
+}
+
+.rowContent{
+  font-size:14px;
+  line-height:1.6;
+}
+
+.dot{margin:0 6px;color:#8f96ff}
 
 /* ===== 설정 모달 ===== */
 .modal{
   position:fixed; inset:0;
-  background:rgba(20,22,60,.45);
+  background:rgba(0,0,0,.55);
   display:none;
   align-items:center;
   justify-content:center;
   z-index:1000;
 }
 .modal.open{display:flex}
+
 .modalBox{
-  width:min(420px,90vw);
-  background:#fff;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 20px 50px rgba(0,0,0,.25);
+  width:360px;
+  background:#12153a;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
 }
-.modalBox h2{margin:0 0 8px}
+
+.modalBox h2{
+  margin:0 0 6px;
+  text-align:center;
+}
+
 .modalRow{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; margin:12px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:12px 0;
 }
-.modalRow label{font-weight:700}
+
 .modalActions{
-  display:flex; gap:10px; justify-content:flex-end; margin-top:18px;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:14px;
 }
 </style>
 </head>
 
 <body>
 <main>
- <header class="hero">
   <h1>AEON’S END</h1>
-  <p>무작위로 구성되는 균열 너머의 전투</p>
-</header>
 
   <div class="row">
     <label>게임 종류</label>
@@ -151,38 +156,31 @@ button:hover{opacity:.92}
       <option value="both" selected>기본 + 영원한전쟁</option>
       <option value="random">랜덤</option>
     </select>
-
     <button id="roll">🎲 뽑기</button>
     <button id="openSettings" class="secondary">⚙ 설정</button>
   </div>
 
   <div class="hint">
-    (설정 가능) 보석 / 유물 / 주문 개수 · <b>묻비</b>는 어떤 모드에서도 항상 포함 · 중복 없이 뽑기
+    묻비는 항상 포함 · 중복 없이 뽑기 · 에테르 오름차순 정렬
   </div>
 
-  <div id="msg" class="hint"></div>
-  <div id="result" class="grid"></div>
+  <div id="msg"></div>
+  <div id="result" class="table"></div>
 </main>
 
 <!-- ===== 설정 모달 ===== -->
 <div id="settingsModal" class="modal">
   <div class="modalBox">
     <h2>카드 개수 설정</h2>
-    <div class="hint">저장하면 즉시 반영돼. (기본: 보석 2 / 유물 3 / 주문 4)</div>
-
     <div class="modalRow">
-      <label for="set-gem">보석</label>
-      <input type="number" id="set-gem" min="0" step="1">
+      <span>보석</span><input id="set-gem" type="number" min="0">
     </div>
     <div class="modalRow">
-      <label for="set-relic">유물</label>
-      <input type="number" id="set-relic" min="0" step="1">
+      <span>유물</span><input id="set-relic" type="number" min="0">
     </div>
     <div class="modalRow">
-      <label for="set-spell">주문</label>
-      <input type="number" id="set-spell" min="0" step="1">
+      <span>주문</span><input id="set-spell" type="number" min="0">
     </div>
-
     <div class="modalActions">
       <button id="resetSettings" class="secondary">초기화</button>
       <button id="saveSettings">저장</button>
@@ -191,211 +189,130 @@ button:hover{opacity:.92}
 </div>
 
 <script>
-/* ===== 기본값: '표시'가 아니라 실제로 세팅 ===== */
-const DEFAULTS = { gem:2, relic:3, spell:4 };
-
+/* ===== 기본 세팅 (실제 저장) ===== */
+const DEFAULTS={gem:2,relic:3,spell:4};
 function ensureDefaults(){
-  if(localStorage.getItem("pick_gem") === null)   localStorage.setItem("pick_gem", String(DEFAULTS.gem));
-  if(localStorage.getItem("pick_relic") === null) localStorage.setItem("pick_relic", String(DEFAULTS.relic));
-  if(localStorage.getItem("pick_spell") === null) localStorage.setItem("pick_spell", String(DEFAULTS.spell));
+  if(localStorage.getItem("pick_gem")==null) localStorage.setItem("pick_gem",DEFAULTS.gem);
+  if(localStorage.getItem("pick_relic")==null) localStorage.setItem("pick_relic",DEFAULTS.relic);
+  if(localStorage.getItem("pick_spell")==null) localStorage.setItem("pick_spell",DEFAULTS.spell);
 }
 ensureDefaults();
 
-function getNum(key, fallback){
-  const v = Number(localStorage.getItem(key));
-  return Number.isFinite(v) ? v : fallback;
-}
+const getNum=(k,d)=>Number(localStorage.getItem(k))||d;
 
-/* ===== 규칙 ===== */
+/* ===== 모드 ===== */
 function allowedKinds(mode){
   if(mode==="base") return new Set(["기본","묻비"]);
-  if(mode==="war")  return new Set(["영전","묻비"]);
+  if(mode==="war") return new Set(["영전","묻비"]);
   return new Set(["기본","영전","묻비"]);
 }
 
-function getPickConfig(){
-  return {
-    "네메시스": 1,
-    "캐릭터": 2,
-    "보석": getNum("pick_gem", DEFAULTS.gem),
-    "유물": getNum("pick_relic", DEFAULTS.relic),
-    "주문": getNum("pick_spell", DEFAULTS.spell),
-  };
-}
-
-/* ===== CSV 파싱 ===== */
-const clean = (v)=> (v ?? "").replace(/\uFEFF/g,"").trim();
-
-function normCategory(v){
-  v = clean(v);
-  if(v.includes("네메")) return "네메시스";
-  if(v.includes("캐릭")) return "캐릭터";
-  if(v.includes("보석")) return "보석";
-  if(v.includes("유물")) return "유물";
-  if(v.includes("주문")) return "주문";
-  return v;
-}
-function normKind(v){
-  v = clean(v);
-  if(v.includes("기본")) return "기본";
-  if(v.includes("영"))   return "영전"; // 영원한전쟁/영전 모두 처리
-  if(v.includes("묻"))   return "묻비";
-  return v;
-}
-
-function parseCSV(text){
-  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-  const startIdx = (lines[0] && lines[0].includes("카테고리")) ? 1 : 0;
-
-  const rows = [];
-  for(let i=startIdx;i<lines.length;i++){
-    const p = lines[i].split(",");
-    const category = normCategory(p[0]);
-    const kind = normKind(p[1]);
-    const name = clean(p[2]);
-    const ether = clean(p[3]);
-    if(!category || !kind || !name) continue;
-    rows.push({ category, kind, name, ether });
-  }
-  return rows;
-}
+/* ===== CSV ===== */
+const clean=v=>(v??"").trim();
+const normCat=v=>v.includes("네메")?"네메시스":v.includes("캐릭")?"캐릭터":v.includes("보석")?"보석":v.includes("유물")?"유물":v.includes("주문")?"주문":v;
+const normKind=v=>v.includes("기본")?"기본":v.includes("영")?"영전":v.includes("묻")?"묻비":v;
 
 async function loadData(){
-  const res = await fetch("data.csv", { cache:"no-store" });
-  if(!res.ok) throw new Error(`data.csv를 못 불러왔어 (HTTP ${res.status})`);
-  return parseCSV(await res.text());
+  const r=await fetch("data.csv",{cache:"no-store"});
+  const t=await r.text();
+  return t.split(/\r?\n/).filter(Boolean).map(l=>{
+    const p=l.split(",");
+    return {category:normCat(clean(p[0])),kind:normKind(clean(p[1])),name:clean(p[2]),ether:clean(p[3])};
+  });
 }
 
-/* ===== 랜덤 유틸 ===== */
-function shuffled(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
+/* ===== 유틸 ===== */
+const etherVal=i=>Number(String(i.ether??"").replace(/[^\d]/g,""))||Infinity;
+const shuffle=a=>a.slice().sort(()=>Math.random()-0.5);
 
-function sampleUnique(pool, n){
-  if(n <= 0) return [];
-  if(n > pool.length) throw new Error(`후보가 ${pool.length}개라서 ${n}개를 중복 없이 뽑을 수 없어.`);
-  return shuffled(pool).slice(0,n);
-}
+/* ===== 렌더 (표) ===== */
+function render(result){
+  const box=document.getElementById("result");
+  box.innerHTML="";
+  const order=["네메시스","캐릭터","보석","유물","주문"];
 
-/* ===== 렌더 ===== */
-function render(result, pickConfig){
-  const box = document.getElementById("result");
-  box.innerHTML = "";
-
-  const order = ["네메시스","캐릭터","보석","유물","주문"];
   for(const cat of order){
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `<h2>${cat} <span class="meta">(선택 ${pickConfig[cat]}개)</span></h2>`;
+    const row=document.createElement("div");
+    row.className="rowItem";
 
-    for(const item of result[cat]){
-      const etherNum = Number(String(item.ether ?? "").replace(/[^\d]/g,""));
-      const title = (Number.isFinite(etherNum) && etherNum>0)
-        ? `${etherNum}♪ ${item.name}`
-        : item.name;
+    const t=document.createElement("div");
+    t.className="rowTitle";
+    t.textContent=cat;
 
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div><b>${title}</b>${item.kind==="묻비" ? `<span class="badge">묻비</span>` : ""}</div>
-        <div class="meta">${item.kind}</div>
-      `;
-      card.appendChild(div);
-    }
+    const c=document.createElement("div");
+    c.className="rowContent";
+    c.innerHTML=result[cat].map(i=>{
+      const e=etherVal(i);
+      return e<Infinity?`${e}♪ ${i.name}`:i.name;
+    }).join(`<span class="dot">·</span>`);
 
-    box.appendChild(card);
+    row.append(t,c);
+    box.appendChild(row);
   }
 }
 
-/* ===== 메인 뽑기 ===== */
+/* ===== 메인 ===== */
 async function roll(){
-  const msg = document.getElementById("msg");
-  msg.innerHTML = "";
+  let mode=document.getElementById("mode").value;
+  if(mode==="random") mode=["base","war","both"][Math.floor(Math.random()*3)];
 
-  let mode = document.getElementById("mode").value;
+  document.getElementById("msg").innerHTML=`이번 판 모드: <b>${mode==="base"?"기본":mode==="war"?"영원한전쟁":"기본 + 영원한전쟁"}</b>`;
 
-  // A모드: 랜덤 선택이면 뽑기 누를 때마다 모드가 랜덤으로 확정
-  if(mode === "random"){
-    const choices = ["base","war","both"];
-    mode = choices[Math.floor(Math.random() * choices.length)];
+  const rows=await loadData();
+  const allowed=allowedKinds(mode);
+  const pick={
+    네메시스:1,
+    캐릭터:2,
+    보석:getNum("pick_gem",2),
+    유물:getNum("pick_relic",3),
+    주문:getNum("pick_spell",4)
+  };
+
+  const byCat={};
+  for(const r of rows){
+    if(!(r.category in pick)) continue;
+    if(!allowed.has(r.kind)) continue;
+    (byCat[r.category] ||= []).push(r);
   }
 
-  const modeLabel =
-    mode==="base" ? "기본" :
-    mode==="war" ? "영원한전쟁" :
-    "기본 + 영원한전쟁";
-
-  msg.innerHTML = `이번 판 모드: <b>${modeLabel}</b>`;
-
-  try{
-    const rows = await loadData();
-    const allowed = allowedKinds(mode);
-    const pickConfig = getPickConfig();
-
-    const byCat = {};
-    for(const r of rows){
-      if(!(r.category in pickConfig)) continue;
-      if(!allowed.has(r.kind)) continue;
-      (byCat[r.category] ||= []).push(r);
-    }
-
-    const result = {};
-    for(const [cat, cnt] of Object.entries(pickConfig)){
-      const pool = byCat[cat] || [];
-      result[cat] = sampleUnique(pool, cnt);
-    }
-
-    render(result, pickConfig);
-  }catch(e){
-    msg.innerHTML = `<div class="error">${e.message}</div>`;
-    document.getElementById("result").innerHTML = "";
+  const result={};
+  for(const c in pick){
+    result[c]=shuffle(byCat[c]||[]).slice(0,pick[c]).sort((a,b)=>etherVal(a)-etherVal(b));
   }
+
+  render(result);
 }
 
 /* ===== 설정 모달 ===== */
-const modal = document.getElementById("settingsModal");
-const setGem = document.getElementById("set-gem");
-const setRelic = document.getElementById("set-relic");
-const setSpell = document.getElementById("set-spell");
+const modal=document.getElementById("settingsModal");
+const setGem=document.getElementById("set-gem");
+const setRelic=document.getElementById("set-relic");
+const setSpell=document.getElementById("set-spell");
 
-document.getElementById("openSettings").addEventListener("click", () => {
-  ensureDefaults();
+openSettings.onclick=()=>{
   modal.classList.add("open");
-  setGem.value = getNum("pick_gem", DEFAULTS.gem);
-  setRelic.value = getNum("pick_relic", DEFAULTS.relic);
-  setSpell.value = getNum("pick_spell", DEFAULTS.spell);
-});
+  setGem.value=getNum("pick_gem",2);
+  setRelic.value=getNum("pick_relic",3);
+  setSpell.value=getNum("pick_spell",4);
+};
+modal.onclick=e=>{if(e.target===modal) modal.classList.remove("open")};
 
-// 배경 클릭하면 닫기
-modal.addEventListener("click", (e) => {
-  if(e.target === modal) modal.classList.remove("open");
-});
-
-document.getElementById("saveSettings").addEventListener("click", () => {
-  localStorage.setItem("pick_gem", String(Math.max(0, Number(setGem.value || 0))));
-  localStorage.setItem("pick_relic", String(Math.max(0, Number(setRelic.value || 0))));
-  localStorage.setItem("pick_spell", String(Math.max(0, Number(setSpell.value || 0))));
+saveSettings.onclick=()=>{
+  localStorage.setItem("pick_gem",setGem.value);
+  localStorage.setItem("pick_relic",setRelic.value);
+  localStorage.setItem("pick_spell",setSpell.value);
   modal.classList.remove("open");
   roll();
-});
-
-document.getElementById("resetSettings").addEventListener("click", () => {
-  localStorage.setItem("pick_gem", String(DEFAULTS.gem));
-  localStorage.setItem("pick_relic", String(DEFAULTS.relic));
-  localStorage.setItem("pick_spell", String(DEFAULTS.spell));
+};
+resetSettings.onclick=()=>{
+  localStorage.setItem("pick_gem",2);
+  localStorage.setItem("pick_relic",3);
+  localStorage.setItem("pick_spell",4);
   modal.classList.remove("open");
   roll();
-});
+};
 
-/* ===== 이벤트 ===== */
-document.getElementById("roll").addEventListener("click", roll);
-
-/* 첫 로딩: 자동 뽑기 */
+roll.onclick=roll;
 roll();
 </script>
 </body>
