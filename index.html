@@ -8,26 +8,28 @@
 <style>
 :root{
   --bg:#0e1024;
-  --panel:#16193a;
 
-  --line-dark:rgba(140,155,255,.25);
-  --line-light:rgba(120,130,200,.45);
+  /* 밝은 박스 */
+  --box:#f5f7ff;          /* 행 전체 박스 배경 */
+  --box2:#ffffff;         /* pill 배경 */
+  --border:#c7cff7;
 
-  --text-dark:#1a1d33;
-  --text-light:#eef1ff;
-  --muted:#6b70a5;
+  /* 텍스트(어둡게) */
+  --text:#1a1d33;
+  --muted:#5f6698;
 
+  /* 포인트 */
   --accent:#5c66ff;
 }
 
-/* ===== 기본 ===== */
+/* ===== 배경은 다크 유지 ===== */
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
   background:
     radial-gradient(1200px 500px at 50% -10%, #2b2f5a 0%, transparent 60%),
     linear-gradient(180deg, #0e1024 0%, #15183a 100%);
-  color:var(--text-light);
+  color:var(--text);
 }
 
 main{
@@ -41,6 +43,7 @@ h1{
   margin:10px 0 20px;
   letter-spacing:4px;
   font-size:34px;
+  color:#eef1ff;
 }
 
 /* ===== 상단 컨트롤 ===== */
@@ -59,9 +62,9 @@ select,button,input{
 }
 
 select,input{
-  border:1px solid var(--line-dark);
+  border:1px solid rgba(180,190,255,.35);
   background:#0f1230;
-  color:var(--text-light);
+  color:#eef1ff;
 }
 
 button{
@@ -77,8 +80,9 @@ button{
 
 button.secondary{
   background:#0f1230;
-  border:1px solid var(--line-dark);
+  border:1px solid rgba(180,190,255,.35);
   box-shadow:none;
+  color:#eef1ff;
 }
 
 button:hover{opacity:.92}
@@ -94,10 +98,11 @@ button:hover{opacity:.92}
   text-align:center;
   margin-top:12px;
   font-size:13px;
+  color:#cfd4ff;
 }
 
 /* =========================================================
-   ===== 표(Table) UI – 밝은 내용 박스 / 어두운 글씨 =====
+   ===== 표(Table) UI – 행 전체가 밝은 박스 =====
    ========================================================= */
 
 .table{
@@ -107,19 +112,24 @@ button:hover{opacity:.92}
   gap:12px;
 }
 
-/* 행 하나 */
+/* ✅ 행 전체(네메시스 한 줄)가 밝은 박스 */
 .rowItem{
   display:grid;
   grid-template-columns:120px 1fr;
   gap:14px;
   padding:14px;
-  border:1px solid var(--line-dark);
+  border:1px solid var(--border);
   border-radius:16px;
-  background:rgba(255,255,255,.04);
-  box-shadow:0 12px 26px rgba(0,0,0,.28);
+  background:var(--box);
+  box-shadow:0 10px 24px rgba(0,0,0,.20);
 }
 
-/* 왼쪽 카테고리 라벨 */
+.rowItem:hover{
+  box-shadow:0 14px 30px rgba(0,0,0,.26);
+  transform:translateY(-1px);
+}
+
+/* 왼쪽 라벨도 밝은 박스 안에서 더 구분되게 */
 .rowTitle{
   display:flex;
   align-items:center;
@@ -128,57 +138,39 @@ button:hover{opacity:.92}
   font-weight:900;
   letter-spacing:.8px;
   font-size:14px;
-  color:var(--text-light);
+  color:var(--text);
 
-  background:linear-gradient(
-    180deg,
-    rgba(143,155,255,.22),
-    rgba(92,102,255,.08)
-  );
-  border:1px solid rgba(140,155,255,.32);
+  background:linear-gradient(180deg, #ffffff, #eef1ff);
+  border:1px solid var(--border);
   border-radius:12px;
   padding:12px 6px;
 }
 
-/* 카테고리별 컬러 */
-.rowItem[data-cat="네메시스"] .rowTitle{
-  background:linear-gradient(180deg, rgba(255,120,120,.22), rgba(255,120,120,.07));
-}
-.rowItem[data-cat="캐릭터"] .rowTitle{
-  background:linear-gradient(180deg, rgba(120,255,200,.20), rgba(120,255,200,.06));
-}
-.rowItem[data-cat="보석"] .rowTitle{
-  background:linear-gradient(180deg, rgba(120,170,255,.24), rgba(120,170,255,.07));
-}
-.rowItem[data-cat="유물"] .rowTitle{
-  background:linear-gradient(180deg, rgba(255,210,120,.24), rgba(255,210,120,.07));
-}
-.rowItem[data-cat="주문"] .rowTitle{
-  background:linear-gradient(180deg, rgba(180,120,255,.24), rgba(180,120,255,.07));
-}
+/* 카테고리별 라벨 포인트(너무 튀지 않게) */
+.rowItem[data-cat="네메시스"] .rowTitle{ box-shadow: inset 0 0 0 2px rgba(255,120,120,.25); }
+.rowItem[data-cat="캐릭터"]   .rowTitle{ box-shadow: inset 0 0 0 2px rgba(120,255,200,.22); }
+.rowItem[data-cat="보석"]     .rowTitle{ box-shadow: inset 0 0 0 2px rgba(120,170,255,.25); }
+.rowItem[data-cat="유물"]     .rowTitle{ box-shadow: inset 0 0 0 2px rgba(255,210,120,.25); }
+.rowItem[data-cat="주문"]     .rowTitle{ box-shadow: inset 0 0 0 2px rgba(180,120,255,.25); }
 
-/* ===== 오른쪽 내용 영역 (밝은 패널) ===== */
+/* 오른쪽 내용은 그냥 칩들이 잘 보이게 */
 .rowContent{
   display:flex;
   flex-wrap:wrap;
   gap:8px 10px;
   align-items:flex-start;
-
-  background:#f5f7ff;
-  border-radius:12px;
-  padding:10px 12px;
 }
 
-/* ===== 카드 항목 pill ===== */
+/* pill(칩) */
 .pill{
   display:inline-flex;
   align-items:center;
   gap:6px;
   padding:7px 11px;
   border-radius:999px;
-  border:1px solid var(--line-light);
-  background:#ffffff;
-  color:var(--text-dark);
+  border:1px solid var(--border);
+  background:var(--box2);
+  color:var(--text);
   font-size:13px;
   white-space:nowrap;
 
@@ -200,7 +192,7 @@ button:hover{opacity:.92}
   border-color:#6f7cff;
   box-shadow:
     0 0 0 1px rgba(110,125,255,.25) inset,
-    0 2px 6px rgba(90,100,255,.25);
+    0 2px 6px rgba(90,100,255,.20);
 }
 
 .pill .tag{
@@ -209,7 +201,7 @@ button:hover{opacity:.92}
   font-weight:700;
 }
 
-/* ===== 설정 모달 ===== */
+/* ===== 설정 모달 (다크 유지) ===== */
 .modal{
   position:fixed;
   inset:0;
@@ -225,10 +217,11 @@ button:hover{opacity:.92}
 .modalBox{
   width:360px;
   background:#12153a;
-  border:1px solid var(--line-dark);
+  border:1px solid rgba(180,190,255,.35);
   border-radius:16px;
   padding:18px;
   box-shadow:0 25px 60px rgba(0,0,0,.45);
+  color:#eef1ff;
 }
 
 .modalBox h2{
