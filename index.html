@@ -10,19 +10,18 @@
   --bg:#0e1024;
 
   /* 밝은 박스 */
-  --box:#f5f7ff;          /* 행 전체 박스 배경 */
-  --box2:#ffffff;         /* pill 배경 */
+  --box:#f6f8ff;
+  --box2:#ffffff;
   --border:#c7cff7;
 
-  /* 텍스트(어둡게) */
+  /* 텍스트 */
   --text:#1a1d33;
   --muted:#5f6698;
 
-  /* 포인트 */
   --accent:#5c66ff;
 }
 
-/* ===== 배경은 다크 유지 ===== */
+/* ===== 배경 ===== */
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
@@ -33,32 +32,32 @@ body{
 }
 
 main{
-  max-width:900px;
+  max-width:920px;
   margin:0 auto;
-  padding:26px;
+  padding:28px;
 }
 
 h1{
   text-align:center;
-  margin:10px 0 20px;
+  margin:10px 0 22px;
   letter-spacing:4px;
-  font-size:34px;
+  font-size:36px;
   color:#eef1ff;
 }
 
 /* ===== 상단 컨트롤 ===== */
 .row{
   display:flex;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
   align-items:center;
   justify-content:center;
 }
 
 select,button,input{
-  padding:8px 12px;
-  font-size:14px;
-  border-radius:10px;
+  padding:10px 14px;
+  font-size:15px;
+  border-radius:12px;
 }
 
 select,input{
@@ -73,135 +72,101 @@ button{
   color:white;
   font-weight:800;
   cursor:pointer;
-  box-shadow:
-    0 6px 18px rgba(90,100,255,.35),
-    inset 0 1px 0 rgba(255,255,255,.25);
 }
 
 button.secondary{
   background:#0f1230;
   border:1px solid rgba(180,190,255,.35);
-  box-shadow:none;
   color:#eef1ff;
 }
 
-button:hover{opacity:.92}
-
 .hint{
   text-align:center;
-  margin-top:10px;
-  font-size:12px;
+  margin-top:12px;
+  font-size:14px;
   color:#aeb4ff;
 }
 
 #msg{
   text-align:center;
-  margin-top:12px;
-  font-size:13px;
+  margin-top:14px;
+  font-size:15px;
   color:#cfd4ff;
 }
 
-/* =========================================================
-   ===== 표(Table) UI – 행 전체가 밝은 박스 =====
-   ========================================================= */
+/* =================================================
+   ===== 표 UI – 가독성 최우선 =====
+   ================================================= */
 
 .table{
-  margin-top:18px;
+  margin-top:22px;
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:14px;
 }
 
-/* ✅ 행 전체(네메시스 한 줄)가 밝은 박스 */
+/* 행 전체 */
 .rowItem{
   display:grid;
-  grid-template-columns:120px 1fr;
-  gap:14px;
-  padding:14px;
+  grid-template-columns:130px 1fr;
+  gap:16px;
+  padding:16px;
   border:1px solid var(--border);
-  border-radius:16px;
+  border-radius:18px;
   background:var(--box);
-  box-shadow:0 10px 24px rgba(0,0,0,.20);
 }
 
-.rowItem:hover{
-  box-shadow:0 14px 30px rgba(0,0,0,.26);
-  transform:translateY(-1px);
-}
-
-/* 왼쪽 라벨도 밝은 박스 안에서 더 구분되게 */
+/* 왼쪽 카테고리 */
 .rowTitle{
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
   font-weight:900;
-  letter-spacing:.8px;
-  font-size:14px;
+  letter-spacing:1px;
+  font-size:17px;           /* 🔼 큼 */
   color:var(--text);
 
-  background:linear-gradient(180deg, #ffffff, #eef1ff);
+  background:#ffffff;
   border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px 6px;
+  border-radius:14px;
+  padding:14px 8px;
 }
 
-/* 카테고리별 라벨 포인트(너무 튀지 않게) */
-.rowItem[data-cat="네메시스"] .rowTitle{ box-shadow: inset 0 0 0 2px rgba(255,120,120,.25); }
-.rowItem[data-cat="캐릭터"]   .rowTitle{ box-shadow: inset 0 0 0 2px rgba(120,255,200,.22); }
-.rowItem[data-cat="보석"]     .rowTitle{ box-shadow: inset 0 0 0 2px rgba(120,170,255,.25); }
-.rowItem[data-cat="유물"]     .rowTitle{ box-shadow: inset 0 0 0 2px rgba(255,210,120,.25); }
-.rowItem[data-cat="주문"]     .rowTitle{ box-shadow: inset 0 0 0 2px rgba(180,120,255,.25); }
-
-/* 오른쪽 내용은 그냥 칩들이 잘 보이게 */
+/* 오른쪽 내용 */
 .rowContent{
   display:flex;
   flex-wrap:wrap;
-  gap:8px 10px;
+  gap:12px;
   align-items:flex-start;
 }
 
-/* pill(칩) */
+/* 카드 항목 */
 .pill{
   display:inline-flex;
   align-items:center;
-  gap:6px;
-  padding:7px 11px;
+  gap:8px;
+  padding:10px 14px;
   border-radius:999px;
   border:1px solid var(--border);
   background:var(--box2);
   color:var(--text);
-  font-size:13px;
+  font-size:16px;          /* 🔼 제일 중요 */
   white-space:nowrap;
-
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.08),
-    inset 0 1px 0 rgba(255,255,255,.75);
 }
 
 /* 에테르 */
 .pill .ether{
   font-weight:900;
   color:#2c36b5;
-  letter-spacing:.2px;
+  font-size:17px;          /* 🔼 */
 }
 
-/* 묻비 */
-.pill.mutbi{
-  background:#eef1ff;
-  border-color:#6f7cff;
-  box-shadow:
-    0 0 0 1px rgba(110,125,255,.25) inset,
-    0 2px 6px rgba(90,100,255,.20);
-}
+/* ❌ 묻비 강조 완전 제거 */
+/* .pill.mutbi 없음 */
+/* .pill .tag 없음 */
 
-.pill .tag{
-  font-size:11px;
-  color:#4a55c9;
-  font-weight:700;
-}
-
-/* ===== 설정 모달 (다크 유지) ===== */
+/* ===== 설정 모달 ===== */
 .modal{
   position:fixed;
   inset:0;
@@ -218,14 +183,13 @@ button:hover{opacity:.92}
   width:360px;
   background:#12153a;
   border:1px solid rgba(180,190,255,.35);
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 25px 60px rgba(0,0,0,.45);
+  border-radius:18px;
+  padding:20px;
   color:#eef1ff;
 }
 
 .modalBox h2{
-  margin:0 0 8px;
+  margin:0 0 10px;
   text-align:center;
 }
 
@@ -233,14 +197,14 @@ button:hover{opacity:.92}
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin:14px 0;
+  margin:16px 0;
 }
 
 .modalActions{
   display:flex;
   justify-content:flex-end;
-  gap:8px;
-  margin-top:16px;
+  gap:10px;
+  margin-top:18px;
 }
 </style>
 
