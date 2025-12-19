@@ -304,7 +304,18 @@ button:hover{opacity:.92}
   font-size:14px;
   padding:8px 14px;
 }
+/* ===== 모바일에서 제목 칸 살짝 줄이기 ===== */
+@media (max-width: 600px){
+  .rowItem{
+    grid-template-columns:110px 1fr; /* 130 → 110 */
+  }
 
+  .rowTitle{
+    font-size:16px;      /* 18 → 16 */
+    padding:10px 6px;    /* 위아래/좌우 조금 줄이기 */
+    letter-spacing:0.5px;
+  }
+}
 </style>
 
 </head>
