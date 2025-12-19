@@ -23,13 +23,22 @@
   --accent:#5c66ff;
 }
 
-/* ===== 배경 밝게 + 그라데이션 ===== */
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
+
+  /* ✅ 은은한 스트라이프 + 밝은 그라데이션 */
   background:
-    radial-gradient(900px 420px at 50% 0%, var(--bg3) 0%, transparent 65%),
-    linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 70%, #ffffff 100%);
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,.35) 0px,
+      rgba(255,255,255,.35) 10px,
+      rgba(255,255,255,0) 10px,
+      rgba(255,255,255,0) 22px
+    ),
+    radial-gradient(900px 420px at 50% 0%, #f7f5ff 0%, transparent 65%),
+    linear-gradient(180deg, #f3f6ff 0%, #eef2ff 70%, #ffffff 100%);
+
   color:var(--text);
 }
 
@@ -398,68 +407,84 @@ function render(result){
 
 
 /* ===== 메인 ===== */
-async function roll(){
-  let mode=document.getElementById("mode").value;
-  if(mode==="random") mode=["base","war","both"][Math.floor(Math.random()*3)];
+/* ===== 메인 ===== */
+async function doRoll(){
+  let mode = document.getElementById("mode").value;
+  if(mode === "random") mode = ["base","war","both"][Math.floor(Math.random()*3)];
 
-  document.getElementById("msg").innerHTML=`이번 판 모드: <b>${mode==="base"?"기본":mode==="war"?"영원한전쟁":"기본 + 영원한전쟁"}</b>`;
+  document.getElementById("msg").innerHTML =
+    `이번 판 모드: <b>${mode==="base"?"기본":mode==="war"?"영원한전쟁":"기본 + 영원한전쟁"}</b>`;
 
-  const rows=await loadData();
-  const allowed=allowedKinds(mode);
-  const pick={
-    네메시스:1,
-    캐릭터:2,
-    보석:getNum("pick_gem",2),
-    유물:getNum("pick_relic",3),
-    주문:getNum("pick_spell",4)
+  const rows = await loadData();
+  const allowed = allowedKinds(mode);
+  const pick = {
+    네메시스: 1,
+    캐릭터: 2,
+    보석: getNum("pick_gem", 2),
+    유물: getNum("pick_relic", 3),
+    주문: getNum("pick_spell", 4)
   };
 
-  const byCat={};
+  const byCat = {};
   for(const r of rows){
     if(!(r.category in pick)) continue;
     if(!allowed.has(r.kind)) continue;
     (byCat[r.category] ||= []).push(r);
   }
 
-  const result={};
+  const result = {};
   for(const c in pick){
-    result[c]=shuffle(byCat[c]||[]).slice(0,pick[c]).sort((a,b)=>etherVal(a)-etherVal(b));
+    result[c] = shuffle(byCat[c] || [])
+      .slice(0, pick[c])
+      .sort((a,b)=>etherVal(a)-etherVal(b));
   }
 
   render(result);
 }
 
 /* ===== 설정 모달 ===== */
-const modal=document.getElementById("settingsModal");
-const setGem=document.getElementById("set-gem");
-const setRelic=document.getElementById("set-relic");
-const setSpell=document.getElementById("set-spell");
+const modal = document.getElementById("settingsModal");
+const setGem = document.getElementById("set-gem");
+const setRelic = document.getElementById("set-relic");
+const setSpell = document.getElementById("set-spell");
 
-openSettings.onclick=()=>{
+const openSettingsBtn = document.getElementById("openSettings");
+const saveSettingsBtn = document.getElementById("saveSettings");
+const resetSettingsBtn = document.getElementById("resetSettings");
+const rollBtn = document.getElementById("roll");
+
+openSettingsBtn.addEventListener("click", () => {
   modal.classList.add("open");
-  setGem.value=getNum("pick_gem",2);
-  setRelic.value=getNum("pick_relic",3);
-  setSpell.value=getNum("pick_spell",4);
-};
-modal.onclick=e=>{if(e.target===modal) modal.classList.remove("open")};
+  setGem.value = getNum("pick_gem", 2);
+  setRelic.value = getNum("pick_relic", 3);
+  setSpell.value = getNum("pick_spell", 4);
+});
 
-saveSettings.onclick=()=>{
-  localStorage.setItem("pick_gem",setGem.value);
-  localStorage.setItem("pick_relic",setRelic.value);
-  localStorage.setItem("pick_spell",setSpell.value);
-  modal.classList.remove("open");
-  roll();
-};
-resetSettings.onclick=()=>{
-  localStorage.setItem("pick_gem",2);
-  localStorage.setItem("pick_relic",3);
-  localStorage.setItem("pick_spell",4);
-  modal.classList.remove("open");
-  roll();
-};
+modal.addEventListener("click", (e) => {
+  if(e.target === modal) modal.classList.remove("open");
+});
 
-roll.onclick=roll;
-roll();
+saveSettingsBtn.addEventListener("click", () => {
+  localStorage.setItem("pick_gem", String(Math.max(0, Number(setGem.value || 0))));
+  localStorage.setItem("pick_relic", String(Math.max(0, Number(setRelic.value || 0))));
+  localStorage.setItem("pick_spell", String(Math.max(0, Number(setSpell.value || 0))));
+  modal.classList.remove("open");
+  doRoll();
+});
+
+resetSettingsBtn.addEventListener("click", () => {
+  localStorage.setItem("pick_gem", "2");
+  localStorage.setItem("pick_relic", "3");
+  localStorage.setItem("pick_spell", "4");
+  modal.classList.remove("open");
+  doRoll();
+});
+
+rollBtn.addEventListener("click", doRoll);
+
+/* 첫 로딩 */
+doRoll();
+
 </script>
 </body>
 </html>
