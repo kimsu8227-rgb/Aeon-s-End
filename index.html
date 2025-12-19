@@ -417,16 +417,16 @@ function render(result){
 
     for(const it of (result[cat] || [])){
       const etherNum = Number(String(it.ether ?? "").replace(/[^\d]/g,"")) || 0;
-      const pill = document.createElement("span");
-      pill.className = "pill" + (it.kind === "묻비" ? " mutbi" : "");
+     const pill = document.createElement("span");
+pill.className = "pill";   // ← mutbi 조건 제거
 
-      const nameText = it.name;
+const etherNum = Number(String(it.ether ?? "").replace(/[^\d]/g,"")) || 0;
 
       // ✅ 원하는 표기: 6♪ 카드이름
-      pill.innerHTML = etherNum
-        ? `<span class="ether">${etherNum}♪</span><span>${nameText}</span>${it.kind==="묻비" ? `<span class="tag">묻비</span>` : ``}`
-        : `<span>${nameText}</span>${it.kind==="묻비" ? `<span class="tag">묻비</span>` : ``}`;
-
+  
+pill.innerHTML = etherNum
+  ? `<span class="ether">${etherNum}♪</span><span>${it.name}</span>`
+  : `<span>${it.name}</span>`;
       c.appendChild(pill);
     }
 
