@@ -304,17 +304,68 @@ button:hover{opacity:.92}
   font-size:14px;
   padding:8px 14px;
 }
-/* ===== 모바일에서 제목 칸 살짝 줄이기 ===== */
+/* =========================
+   📱 모바일 전용 레이아웃
+   ========================= */
 @media (max-width: 600px){
-  .rowItem{
-    grid-template-columns:110px 1fr; /* 130 → 110 */
+
+  /* 전체 여백 살짝 줄이기 */
+  main{
+    padding:20px;
   }
 
-  .rowTitle{
-    font-size:16px;      /* 18 → 16 */
-    padding:10px 6px;    /* 위아래/좌우 조금 줄이기 */
-    letter-spacing:0.5px;
+  /* 제목 살짝 컴팩트하게 */
+  h1{
+    font-size:30px;
+    letter-spacing:2px;
+    margin-bottom:14px;
   }
+
+  /* 상단 컨트롤 간격 정리 */
+  .row{
+    gap:10px;
+  }
+
+  /* ===== 핵심: 제목 칸 가로만 줄이기 ===== */
+  .rowItem{
+    grid-template-columns:110px 1fr; /* PC 130px → 모바일 110px */
+    padding:14px;                    /* 전체 박스 살짝 컴팩트 */
+  }
+
+  /* 제목 칸: 글씨는 그대로, 패딩만 살짝 */
+  .rowTitle{
+    padding:12px 8px;
+    /* font-size 건드리지 않음 */
+  }
+
+  /* 카드 pill 살짝 컴팩트 */
+  .pill{
+    font-size:15px;
+    padding:8px 12px;
+  }
+
+  /* 에테르 배지 살짝 작게 */
+  .pill .ether{
+    padding:2px 7px;
+    font-size:14px;
+  }
+
+  /* 하단 영역 여백 조정 */
+  .footer-area{
+    margin-top:22px;
+    gap:6px;
+  }
+
+  .footer-area button{
+    font-size:13px;
+    padding:6px 12px;
+  }
+
+  .hint.bottom{
+    font-size:12px;
+  }
+}
+
 }
 </style>
 
