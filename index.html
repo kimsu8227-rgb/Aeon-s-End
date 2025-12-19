@@ -27,17 +27,21 @@ body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
 
-  /* ✅ 은은한 스트라이프 + 밝은 그라데이션 */
+  /* 🌿 얇은 세로 스트라이프 + 밝은 그라데이션 */
   background:
     repeating-linear-gradient(
-      135deg,
-      rgba(255,255,255,.35) 0px,
-      rgba(255,255,255,.35) 10px,
-      rgba(255,255,255,0) 10px,
-      rgba(255,255,255,0) 22px
+      90deg,
+      rgba(255,255,255,.45) 0px,
+      rgba(255,255,255,.45) 2px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0) 10px
     ),
-    radial-gradient(900px 420px at 50% 0%, #f7f5ff 0%, transparent 65%),
-    linear-gradient(180deg, #f3f6ff 0%, #eef2ff 70%, #ffffff 100%);
+    linear-gradient(
+      180deg,
+      #f4f6ff 0%,
+      #eef2ff 60%,
+      #ffffff 100%
+    );
 
   color:var(--text);
 }
