@@ -330,12 +330,17 @@ button:hover{opacity:.92}
   .rowItem{
     grid-template-columns:110px 1fr; /* PC 130px → 모바일 110px */
     padding:14px;                    /* 전체 박스 살짝 컴팩트 */
+     align-items: stretch;   /* ✅ 높이 같이 늘어나게 */
   }
 
   /* 제목 칸: 글씨는 그대로, 패딩만 살짝 */
   .rowTitle{
     padding:12px 8px;
     /* font-size 건드리지 않음 */
+        height: 100%;           /* ✅ 확실히 늘어남(안전장치) */
+  }
+  .rowContent{
+    align-self: center;     /* ✅ 오른쪽 내용은 가운데 유지 */
   }
 
   /* 카드 pill 살짝 컴팩트 */
