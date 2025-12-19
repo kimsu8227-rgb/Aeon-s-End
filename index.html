@@ -7,12 +7,14 @@
 
 <style>
 :root{
-  --bg:#0e1024;
+  /* 밝은 배경 */
+  --bg1:#f3f6ff;
+  --bg2:#eef2ff;
+  --bg3:#f7f5ff;
 
-  /* 밝은 박스 */
-  --box:#f6f8ff;
-  --box2:#ffffff;
-  --border:#c7cff7;
+  /* 박스 */
+  --box:#ffffff;
+  --border:#cfd7ff;
 
   /* 텍스트 */
   --text:#1a1d33;
@@ -21,13 +23,13 @@
   --accent:#5c66ff;
 }
 
-/* ===== 배경 ===== */
+/* ===== 배경 밝게 + 그라데이션 ===== */
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
   background:
-    radial-gradient(1200px 500px at 50% -10%, #2b2f5a 0%, transparent 60%),
-    linear-gradient(180deg, #0e1024 0%, #15183a 100%);
+    radial-gradient(900px 420px at 50% 0%, var(--bg3) 0%, transparent 65%),
+    linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 70%, #ffffff 100%);
   color:var(--text);
 }
 
@@ -37,12 +39,13 @@ main{
   padding:28px;
 }
 
+/* 제목과 결과가 같은 기준선으로 정렬되게 */
 h1{
-  text-align:center;
-  margin:10px 0 22px;
-  letter-spacing:4px;
+  margin:6px 0 18px;
   font-size:36px;
-  color:#eef1ff;
+  letter-spacing:3px;
+  text-align:center;
+  color:#15183a;
 }
 
 /* ===== 상단 컨트롤 ===== */
@@ -61,43 +64,46 @@ select,button,input{
 }
 
 select,input{
-  border:1px solid rgba(180,190,255,.35);
-  background:#0f1230;
-  color:#eef1ff;
+  border:1px solid var(--border);
+  background:#ffffff;
+  color:var(--text);
 }
 
 button{
   border:0;
-  background:linear-gradient(180deg,#8f9bff,#5c66ff);
+  background:linear-gradient(180deg,#7f8bff,#5c66ff);
   color:white;
   font-weight:800;
   cursor:pointer;
+  box-shadow:0 8px 18px rgba(92,102,255,.20);
 }
 
 button.secondary{
-  background:#0f1230;
-  border:1px solid rgba(180,190,255,.35);
-  color:#eef1ff;
+  background:#ffffff;
+  border:1px solid var(--border);
+  color:var(--text);
+  box-shadow:none;
 }
+
+button:hover{opacity:.92}
 
 .hint{
   text-align:center;
   margin-top:12px;
   font-size:14px;
-  color:#aeb4ff;
+  color:var(--muted);
 }
 
 #msg{
   text-align:center;
   margin-top:14px;
   font-size:15px;
-  color:#cfd4ff;
+  color:#2b2f5a;
 }
 
 /* =================================================
-   ===== 표 UI – 가독성 최우선 =====
+   ===== 표 UI – 가독성 최우선 + 중앙 정렬 느낌 =====
    ================================================= */
-
 .table{
   margin-top:22px;
   display:flex;
@@ -105,7 +111,7 @@ button.secondary{
   gap:14px;
 }
 
-/* 행 전체 */
+/* 행 전체 박스 */
 .rowItem{
   display:grid;
   grid-template-columns:130px 1fr;
@@ -114,9 +120,10 @@ button.secondary{
   border:1px solid var(--border);
   border-radius:18px;
   background:var(--box);
+  box-shadow:0 10px 24px rgba(25,35,80,.08);
 }
 
-/* 왼쪽 카테고리 */
+/* 왼쪽 카테고리(제목 박스) */
 .rowTitle{
   display:flex;
   align-items:center;
@@ -124,13 +131,39 @@ button.secondary{
   text-align:center;
   font-weight:900;
   letter-spacing:1px;
-  font-size:17px;           /* 🔼 큼 */
+  font-size:17px;
   color:var(--text);
 
-  background:#ffffff;
   border:1px solid var(--border);
   border-radius:14px;
   padding:14px 8px;
+
+  /* 기본은 은은한 회보라 */
+  background:linear-gradient(180deg,#fbfbff,#f2f4ff);
+}
+
+/* ✅ 카테고리별 연한 색칠 (너무 진하지 않게) */
+.rowItem[data-cat="보석"] .rowTitle{
+  background:linear-gradient(180deg,#f6f0ff,#efe6ff); /* 연보라 */
+  border-color:#dacbff;
+}
+.rowItem[data-cat="유물"] .rowTitle{
+  background:linear-gradient(180deg,#eef6ff,#e3efff); /* 연파랑 */
+  border-color:#c6dcff;
+}
+.rowItem[data-cat="주문"] .rowTitle{
+  background:linear-gradient(180deg,#fff8dc,#fff1b8); /* 연노랑 */
+  border-color:#f0dc8a;
+}
+
+/* 네메시스/캐릭터는 은은하게 */
+.rowItem[data-cat="네메시스"] .rowTitle{
+  background:linear-gradient(180deg,#fff1f1,#ffe7e7);
+  border-color:#ffd0d0;
+}
+.rowItem[data-cat="캐릭터"] .rowTitle{
+  background:linear-gradient(180deg,#f0fff6,#e7ffef);
+  border-color:#c9f3d8;
 }
 
 /* 오른쪽 내용 */
@@ -141,7 +174,7 @@ button.secondary{
   align-items:flex-start;
 }
 
-/* 카드 항목 */
+/* 카드 항목 pill */
 .pill{
   display:inline-flex;
   align-items:center;
@@ -149,28 +182,27 @@ button.secondary{
   padding:10px 14px;
   border-radius:999px;
   border:1px solid var(--border);
-  background:var(--box2);
+  background:#ffffff;
   color:var(--text);
-  font-size:16px;          /* 🔼 제일 중요 */
+  font-size:16px;
   white-space:nowrap;
+  box-shadow:0 1px 2px rgba(0,0,0,.06);
 }
 
 /* 에테르 */
 .pill .ether{
   font-weight:900;
   color:#2c36b5;
-  font-size:17px;          /* 🔼 */
+  font-size:17px;
 }
 
-/* ❌ 묻비 강조 완전 제거 */
-/* .pill.mutbi 없음 */
-/* .pill .tag 없음 */
+/* 묻비 강조는 없음(요청대로) */
 
 /* ===== 설정 모달 ===== */
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.45);
   display:none;
   align-items:center;
   justify-content:center;
@@ -181,11 +213,12 @@ button.secondary{
 
 .modalBox{
   width:360px;
-  background:#12153a;
-  border:1px solid rgba(180,190,255,.35);
+  background:#ffffff;
+  border:1px solid var(--border);
   border-radius:18px;
   padding:20px;
-  color:#eef1ff;
+  box-shadow:0 30px 70px rgba(25,35,80,.25);
+  color:var(--text);
 }
 
 .modalBox h2{
