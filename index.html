@@ -112,23 +112,43 @@ button:hover{opacity:.92}
 }
 
 /* 행 전체 박스 */
+/* ===== 행 전체 박스 ===== */
 .rowItem{
   display:grid;
   grid-template-columns:130px 1fr;
   gap:16px;
   padding:16px;
-  border:3px solid var(--border);     /* ✅ 두껍게 */
   border-radius:18px;
-  background:var(--box);
-  box-shadow:0 10px 24px rgba(25,35,80,.08);
+  border:1px solid rgba(0,0,0,.08);
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
 }
 
-/* ✅ 행 테두리도 카테고리 색으로 */
-.rowItem[data-cat="보석"]{ border-color:#dacbff; }  /* 연보라 */
-.rowItem[data-cat="유물"]{ border-color:#c6dcff; }  /* 연파랑 */
-.rowItem[data-cat="주문"]{ border-color:#f0dc8a; }  /* 연노랑 */
-.rowItem[data-cat="네메시스"]{ border-color:#ffd0d0; }
-.rowItem[data-cat="캐릭터"]{ border-color:#c9f3d8; }
+/* === 카테고리별 행 전체 배경색 === */
+.rowItem[data-cat="네메시스"]{
+  background:#fff1f1;   /* 연핑크 */
+  border-color:#ffd0d0;
+}
+
+.rowItem[data-cat="캐릭터"]{
+  background:#f0fff6;   /* 연민트 */
+  border-color:#c9f3d8;
+}
+
+.rowItem[data-cat="보석"]{
+  background:#f4efff;   /* 연보라 */
+  border-color:#dacbff;
+}
+
+.rowItem[data-cat="유물"]{
+  background:#eef6ff;   /* 연파랑 */
+  border-color:#c6dcff;
+}
+
+.rowItem[data-cat="주문"]{
+  background:#fff9e6;   /* 연노랑 */
+  border-color:#f0dc8a;
+}
+
 
 /* 왼쪽 카테고리(제목 박스) */
 .rowTitle{
