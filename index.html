@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AEON’S END Tools</title>
+<title>AEON’S END</title>
+
 <style>
 *{box-sizing:border-box}
 :root{
@@ -12,90 +13,108 @@
   --border:#cfd7ff;
   --card:#ffffff;
 }
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
   background:
-    repeating-linear-gradient(90deg, rgba(40,55,120,.08) 0px, rgba(40,55,120,.08) 2px, #fff 2px, #fff 14px);
+    repeating-linear-gradient(
+      90deg,
+      rgba(40,55,120,.08) 0px,
+      rgba(40,55,120,.08) 2px,
+      #fff 2px,
+      #fff 14px
+    );
   color:var(--text);
 }
-main{max-width:980px;margin:0 auto;padding:34px}
-header{display:flex;flex-direction:column;align-items:center;gap:10px;margin:12px 0 26px}
-h1{margin:0;font-size:34px;letter-spacing:2px}
-p{margin:0;color:var(--muted);text-align:center;line-height:1.5}
 
-.grid{display:grid;gap:16px;margin-top:18px}
-@media (min-width:760px){ .grid{grid-template-columns:1fr 1fr} }
+main{
+  max-width:880px;
+  margin:0 auto;
+  padding:36px 24px;
+}
 
+header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+h1{
+  margin:0;
+  font-size:36px;
+  letter-spacing:3px;
+}
+
+.grid{
+  display:grid;
+  gap:18px;
+}
+
+@media (min-width:700px){
+  .grid{ grid-template-columns:1fr 1fr; }
+}
+
+/* ===== 카드 전체가 링크 ===== */
 .card{
   background:var(--card);
   border:1px solid rgba(0,0,0,.08);
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 10px 24px rgba(0,0,0,.06);
-  display:flex;flex-direction:column;gap:12px;
-}
-.card h2{margin:0;font-size:18px;letter-spacing:.5px}
-.meta{color:var(--muted);font-size:13px;line-height:1.45}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  border-radius:20px;
+  padding:28px 20px;
+  box-shadow:0 10px 26px rgba(0,0,0,.06);
 
-a.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:10px 14px;border-radius:12px;
-  text-decoration:none;font-weight:800;
-  border:1px solid var(--border);
-  color:var(--text);background:#fff;
-}
-a.btn.primary{
-  border:0;color:#fff;
-  background:linear-gradient(180deg,#7f8bff,#5c66ff);
-  box-shadow:0 8px 18px rgba(92,102,255,.20);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+
+  cursor:pointer;
+  text-decoration:none;
+  color:var(--text);
+
+  transition:transform .15s ease, box-shadow .15s ease;
 }
 
-footer{
-  margin-top:26px;
-  padding-top:14px;
-  border-top:1px dashed #d7dcff;
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 34px rgba(0,0,0,.10);
+}
+
+/* 아이콘 */
+.icon{
+  font-size:42px;
+  line-height:1;
+}
+
+/* 텍스트 */
+.cardTitle{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:1px;
   text-align:center;
-  color:#6b70a5;
-  font-size:12px;
 }
 </style>
 </head>
+
 <body>
 <main>
   <header>
     <h1>AEON’S END</h1>
-    <p>도구 모음 · 원하는 기능을 선택하세요</p>
   </header>
 
   <section class="grid">
-    <div class="card">
-      <h2>랜덤 세팅</h2>
-      <div class="meta">네메시스 1 · 캐릭터 2 · 보석/유물/주문 개수 설정 · 모드 선택/랜덤</div>
-      <div class="actions">
-        <a class="btn primary" href="ae-rnd-a9f3.html">열기</a>
-      </div>
-    </div>
+    <!-- 랜덤 세팅 -->
+    <a class="card" href="ae-rnd-a9f3.html">
+      <div class="icon">🎲</div>
+      <div class="cardTitle">랜덤 세팅</div>
+    </a>
 
-    <div class="card">
-      <h2>생명력 다이얼 (준비중)</h2>
-      <div class="meta">HP / 점수 카운터 도구</div>
-      <div class="actions">
-        <a class="btn" href="#" onclick="alert('곧 추가할게!')">준비중</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Spirit Island (나중에)</h2>
-      <div class="meta">별도 사이트로 만들고 링크로 연결할 예정</div>
-      <div class="actions">
-        <a class="btn" href="#" onclick="alert('나중에 외부 링크로 연결!')">나중에 추가</a>
-      </div>
+    <!-- 생명력 다이얼 (나중에 연결) -->
+    <div class="card" onclick="alert('곧 추가할게!')">
+      <div class="icon">❤️</div>
+      <div class="cardTitle">생명력 다이얼</div>
     </div>
   </section>
-
-  <footer>GitHub Pages · index.html</footer>
 </main>
 </body>
 </html>
