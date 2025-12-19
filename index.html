@@ -17,8 +17,8 @@
   --border:#cfd7ff;
 
   /* 텍스트 */
-  --text:#1a1d33;
-  --muted:#5f6698;
+  --text:#101325;   /* ✅ 더 진하게 */
+  --muted:#4b5283;  /* ✅ 설명도 좀 더 진하게 */
 
   --accent:#5c66ff;
 }
@@ -117,11 +117,18 @@ button:hover{opacity:.92}
   grid-template-columns:130px 1fr;
   gap:16px;
   padding:16px;
-  border:1px solid var(--border);
+  border:3px solid var(--border);     /* ✅ 두껍게 */
   border-radius:18px;
   background:var(--box);
   box-shadow:0 10px 24px rgba(25,35,80,.08);
 }
+
+/* ✅ 행 테두리도 카테고리 색으로 */
+.rowItem[data-cat="보석"]{ border-color:#dacbff; }  /* 연보라 */
+.rowItem[data-cat="유물"]{ border-color:#c6dcff; }  /* 연파랑 */
+.rowItem[data-cat="주문"]{ border-color:#f0dc8a; }  /* 연노랑 */
+.rowItem[data-cat="네메시스"]{ border-color:#ffd0d0; }
+.rowItem[data-cat="캐릭터"]{ border-color:#c9f3d8; }
 
 /* 왼쪽 카테고리(제목 박스) */
 .rowTitle{
@@ -170,7 +177,7 @@ button:hover{opacity:.92}
 .rowContent{
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+    gap:10px 12px;    /* 줄/가로 간격 균형 */
   align-items:flex-start;
 }
 
@@ -186,14 +193,19 @@ button:hover{opacity:.92}
   color:var(--text);
   font-size:16px;
   white-space:nowrap;
-  box-shadow:0 1px 2px rgba(0,0,0,.06);
+   font-weight:650;         /* ✅ 체감 큼 (500~700 사이) */
+  letter-spacing:-0.1px;   /* ✅ 한글 가독성에 도움 */
+  box-shadow:0 2px 6px rgba(25,35,80,.10); /* 살짝 더 */
 }
 
 /* 에테르 */
 .pill .ether{
   font-weight:900;
-  color:#2c36b5;
-  font-size:17px;
+  color:#1f2aa8;
+  background:#eef1ff;      /* ✅ 작은 배경 */
+  border:1px solid #d7dcff;
+  padding:2px 8px;
+  border-radius:999px;
 }
 
 /* 묻비 강조는 없음(요청대로) */
