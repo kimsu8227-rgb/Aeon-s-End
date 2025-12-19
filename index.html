@@ -287,6 +287,23 @@ button:hover{opacity:.92}
   font-size:13px;
   color:#6b70a5;
 }
+  /* ===== 하단 영역 묶음 ===== */
+.footer-area{
+  margin-top:28px;
+  padding-top:14px;
+  border-top:1px dashed #d7dcff;  /* ← 네가 말한 그 점선 */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+
+/* 설정 버튼을 조용하게 */
+.footer-area button{
+  font-size:14px;
+  padding:8px 14px;
+}
+
 </style>
 
 </head>
@@ -304,7 +321,6 @@ button:hover{opacity:.92}
       <option value="random">랜덤</option>
     </select>
     <button id="roll">🎲 뽑기</button>
-    <button id="openSettings" class="secondary">⚙ 설정</button>
   </div>
 
   
@@ -312,11 +328,13 @@ button:hover{opacity:.92}
   <div id="msg"></div>
   <div id="result" class="table"></div>
   <div class="footer-controls">
-  <button id="openSettings" class="secondary">⚙ 설정</button>
 </div>
+  <div class="footer-area">
+   <button id="openSettings" class="secondary">⚙ 설정</button>
   <div class="hint bottom">
   묻비는 항상 포함 · 중복 없이 뽑기 · 에테르 오름차순 정렬
 </div>
+    </div>
 </main>
 
 <!-- ===== 설정 모달 ===== -->
@@ -417,7 +435,6 @@ function render(result){
 }
 
 
-/* ===== 메인 ===== */
 /* ===== 메인 ===== */
 async function doRoll(){
   let mode = document.getElementById("mode").value;
